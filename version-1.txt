@@ -1,0 +1,17 @@
+1. Setup Database Connection in config/settings.py
+
+2. Create a folder named 'static' at the root to handle styling
+    ----- Handling 'static' files (css, images, js)
+            https://www.digitalocean.com/community/tutorials/working-with-django-templates-static-files
+
+    (Also add syntax to end of settings.py)
+
+
+3. Setup "Application Messages" for DEBUGGING; successfully saving records, error messages, etc
+    ----- https://micropyramid.medium.com/basics-of-django-messages-framework-4315a0f3a469
+    ----- https://dev.to/doridoro/django-messages-framework-482p
+
+    (Also add syntax to settings.py, AFTER "ALLOWED_HOSTS")
+
+
+4. Create ORM Models

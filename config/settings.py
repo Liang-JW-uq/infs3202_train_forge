@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,6 +27,18 @@ SECRET_KEY = 'django-insecure-kdu+gvenhn8d3ayyg2g@vaxcmil@4grxy6cv%2rewq)@4)t+_e
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+
+# application messages
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-secondary',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
 
 
 # Application definition
@@ -76,10 +89,18 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE'    : 'django.db.backends.mysql',
+        'NAME'      : 'db_train_forge',
+        'USER'      : 'root',
+        'PASSWORD'  : 'Aeiou321',
+        'HOST'      : 'localhost',
+        'PORT'      : '3306'
+    } 
 }
 
 
@@ -114,7 +135,17 @@ USE_I18N = True
 USE_TZ = True
 
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
+# 1. The URL used to access static files in the browser
 STATIC_URL = 'static/'
+# 2. Where Django LOOKS for your files during development (Crucial!)
+# This matches your project/static/ folder
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+# 3. Where Django COPIES files for production (Ignore this for now)
+# We name it 'staticfiles' to avoid a name conflict with your source folder
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
