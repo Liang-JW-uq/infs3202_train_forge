@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import EmailValidator
 
 class Trainer(models.Model):
     name = models.CharField(
@@ -6,7 +7,8 @@ class Trainer(models.Model):
         unique=True
     )
     email = models.CharField(
-        max_length=80
+        max_length=80,
+        validators= [EmailValidator()]
     )
     contact_no = models.CharField(
         max_length=20
