@@ -1,55 +1,74 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
+
 from .workout import Workout
 from .exercise import Exercise
 
 class WorkoutExercise(models.Model):
     workout = models.ForeignKey(
-        Workout,
-        on_delete=models.CASCADE,
-        related_name="exercises" # Each workout can have multiple exercises
+        Workout, 
+        on_delete=models.CASCADE, 
+        related_name="exercises"
     )
     exercise = models.ForeignKey(
         Exercise,
-        on_delete=models.CASCADE,
-        related_name="exercise_workout_exercise" # Each junction object points to its own exercise
+        on_delete = models.RESTRICT,
+        related_name = 'workout_exercises'
     )
-    sets = models.IntegerField(
-        db_default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(200)]
+
+    is_done = models.BooleanField(db_default=False)
+
+    # prescribed workout
+    pre_sets = models.PositiveIntegerField(
+        default=0,
+        db_default=0
     )
-    reps = models.IntegerField(
-        db_default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(200)]
+    pre_reps = models.PositiveIntegerField(
+        default=0,
+        db_default=0
     )
-    weight = models.IntegerField(
+    pre_weight = models.PositiveIntegerField(
+        default=0,
         db_default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(200)]
+        blank=True
     )
-    duration = models.IntegerField(
+    pre_duration = models.PositiveIntegerField(
+        default=0,
         db_default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(200)]
+        blank=True
     )
-    actual_sets = models.IntegerField(
+
+    # actual done
+    actual_sets = models.PositiveIntegerField(
+        default=0,
         db_default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(200)]
+        blank=True
     )
-    actual_reps = models.IntegerField(
+    actual_reps = models.PositiveIntegerField(
+        default=0,
         db_default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(200)]
+        blank=True
     )
-    actual_weight = models.IntegerField(
+    actual_weight = models.PositiveIntegerField(
+        default=0,
         db_default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(200)]
+        blank=True
     )
-    actual_duration = models.IntegerField(
+    actual_duration = models.PositiveIntegerField(
+        default=0,
         db_default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(200)]
+        blank=True
     )
 
 
     class Meta:
-        db_table="workouts_exercises"
+        unique_together = ['workout', 'exercise']
+        db_table = "workout_exercises"
+
+    def save(self, *args, **kwargs):
+        # mnually trigger the validators even if modelform not used
+        self.full_clean() 
+        super().save(*args, **kwargs)
+
 
     def __str__(self):
-        return "Placeholder"
+        return f"{self.id}"

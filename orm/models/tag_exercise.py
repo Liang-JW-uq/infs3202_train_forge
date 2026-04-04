@@ -3,9 +3,6 @@ from .tag import Tag
 from .exercise import Exercise
 
 class TagExercise(models.Model):
-    name = models.CharField(
-        max_length=30
-    )
     tag = models.ForeignKey(
         Tag,
         on_delete=models.CASCADE,
@@ -24,6 +21,11 @@ class TagExercise(models.Model):
 
     class Meta:
         db_table="tags_exercises"
+    
+    def save(self, *args, **kwargs):
+        # mnually trigger the validators when modelform not used
+        self.full_clean() 
+        super().save(*args, **kwargs)      
 
     def __str__(self):
         return self.name
