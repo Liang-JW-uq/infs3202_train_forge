@@ -21,5 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     path('', include("trainer.urls")),
-    path('', include("backend.urls"))
+    # path('', include("backend.urls"))
 ]

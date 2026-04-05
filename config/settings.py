@@ -56,7 +56,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'orm',
     'trainer',
-    'backend'
 ]
 
 MIDDLEWARE = [

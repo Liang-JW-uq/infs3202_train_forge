@@ -1,0 +1,17 @@
+{% if form.non_field_errors %}
+    <div class="alert alert-danger py-2 small text-center">
+        {% for error in form.non_field_errors %}
+            {{ error }}
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if form.errors and not form.non_field_errors %}
+    <div class="alert alert-warning py-2 small text-center">
+        {% for field in form %}
+            {% if field.errors %}
+                {{ field.label }}: {{ field.errors|striptags }}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}

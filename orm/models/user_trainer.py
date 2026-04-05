@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+
+
 # https://testdriven.io/blog/django-custom-user-model/
 class UserTrainer(AbstractUser):
     # --- abstract user by default has
