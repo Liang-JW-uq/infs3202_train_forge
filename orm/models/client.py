@@ -7,6 +7,7 @@ from orm.models import UserTrainer as Trainer
 class Client(models.Model):
     
     class PREFERRED_TIMES(models.TextChoices):
+        # First = Value, Second = Display Name
         MORNING = "Morning", "Morning"
         AFTERNOON = "Afternoon", "Afternoon"
         NIGHT = "Night", "Night"
@@ -47,12 +48,13 @@ class Client(models.Model):
         db_default = 0,
         max_digits = 5,
         decimal_places = 2,        
-        validators = [MinValueValidator(1), MaxValueValidator(100)],
+        validators = [MinValueValidator(1), MaxValueValidator(200)],
     )
 
     goals = models.TextField()                              # this is a TEXT (up to 4GB) in database, NOT varchar   
     preferred_times = models.CharField(
         max_length=12,
+        # Depending on the VALUE TYPE of the TextChoices declared above, might have to change to IntegerField or others
         choices = PREFERRED_TIMES,
         default = PREFERRED_TIMES.MORNING
     )

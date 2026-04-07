@@ -2,6 +2,7 @@
     <div class="container">
         <a class="navbar-brand fw-bold" href="{% url 'index' %}">TrainForge</a>
 
+        <h1>{{ request.session.msg }}</h1>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -17,10 +18,10 @@
                         <a class="nav-link" href="{% url 'tag_list' %}">Tags</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Exercises</a>
+                        <a class="nav-link" href="{% url 'exercise_list' %}">Exercises</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Clients</a>
+                        <a class="nav-link" href="{% url 'client_list' %}">Clients</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Workouts</a>

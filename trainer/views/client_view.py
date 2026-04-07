@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 from orm.models import Client, Trainer
 from ..forms import ClientForm
 
@@ -7,6 +8,9 @@ logged_in_trainer = 1
 
 # These path start from trainer/templates/...
 def client_list(request):
+
+    request.session["module"] = 'clients'
+
     trainer = get_object_or_404(Trainer, pk=logged_in_trainer)
     # clients = Client.objects.filter(trainer__id=logged_in_trainer)
     clients = Client.objects.filter(trainer=trainer)
@@ -19,11 +23,17 @@ def client_add(request):
     if request.method == "POST":
         form = ClientForm(request.POST)
         if form.is_valid():
-            # form.save()
-            client = form.save(commit=False)
-            client.trainer = trainer
-            client.save()
-            messages.success(request, "Client Saved!")
+            try:
+                # form.save()
+                client = form.save(commit=False)
+                client.trainer = trainer
+                client.save()
+                messages.success(request, "Client Saved!")
+                return redirect("client_list")
+            except ValidationError as e:
+                form.add_error(None, str(e))
+            except Exception as e:
+                messages.error(request, f"Exceptions: {str(e)}")
     else:
         form = ClientForm()
 
@@ -41,6 +51,7 @@ def client_edit(request, pk):
             client.trainer = trainer
             client.save()
             messages.success(request, "Client Saved!")
+            return redirect("client_list")
     else:
         form = ClientForm(instance=client)
 
@@ -53,7 +64,6 @@ def client_delete(request, pk):
 
     # clients = Client.objects.get(id=pk, trainer=trainer)  <-- Alternate way to only get first item instead of array
     client = Client.objects.filter(id=pk, trainer=trainer).first()
-    print(client)
 
     if request.method == "POST":
         client.delete()

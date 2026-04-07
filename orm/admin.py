@@ -17,3 +17,5 @@ class UserTrainerAdmin(UserAdmin):
     add_fieldsets = UserAdmin.add_fieldsets + (
         ("Custom Fields", {"fields": ("is_trainer",)}),
     )
+
+    list_per_page = 2

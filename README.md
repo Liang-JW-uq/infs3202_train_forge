@@ -21,6 +21,14 @@ Project Structure
     ---- https://micropyramid.medium.com/basics-of-django-messages-framework-4315a0f3a469
     ---- https://dev.to/doridoro/django-messages-framework-482p
 
+* This is for "searching" results in the LIST pages *
+4. Adding Search / Filter to list views and templates
+    --- https://learndjango.com/tutorials/django-search-tutorial
+
+* This is for the "Page 1, 2, 3, ..." at the BOTTOM of pages
+5. Adding pagination to views/templates
+    --- https://medium.com/django-unleashed/django-pagination-tutorial-with-example-745cefd54eb3
+
 10. Authentication
     --- https://medium.com/@mathur.danduprolu/django-getting-started-with-django-2024-authentication-and-authorization-part-8-16-7bf55d1f7570
     --- https://realpython.com/django-user-management/

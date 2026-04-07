@@ -43,7 +43,6 @@ class Exercise(models.Model):
         # help_text = "in Minutes" 
     )
     
-
     # saas requirement - tenant
     trainer = models.ForeignKey(
         Trainer, 
@@ -54,11 +53,12 @@ class Exercise(models.Model):
 
     # =================== M2M (funny behaviour) ===================== #
     # ??????? records delete in django app stil remains in the database ?????????
-    # tags = models.ManyToMany(
-    #   Tag,
-    #   related_name = "tag_exercises",
-    #   reverse_related_name = "exercise_tags"
-    # )
+    tags = models.ManyToManyField(
+        Tag,
+        related_name = "exercises",
+        db_table = "tags_exercises"
+        # reverse_related_name = "exercise_tags"
+    )
     # 
     # AI: in django orm, why when using M2m relations, records delete in app still remains in the database
     # ============================================================ #
