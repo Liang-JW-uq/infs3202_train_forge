@@ -1,0 +1,69 @@
+{% extends 'trainer/base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+        <div class="flex-grow-1 flex-sm-grow-0" style="min-width: 300px;">
+            <h4 class="mb-2 mb-sm-0">Appointments</h4>
+        </div>
+
+        <div>
+            <a href="{% url 'appointment_calendar' %}" class="btn btn-primary">Calendar View</a>
+            <a href="{% url 'appointment_list' %}" class="btn btn-secondary">List View</a>
+        </div>
+        
+    </div>
+
+    <hr class="opacity-100" style="height:2px; background-color: #3ABEF9;" />
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+        <!-- Search Aligned Far Left -->
+        <form method="GET" action="{% url 'appointment_list' %}" class="flex-grow-1 flex-sm-grow-0" style="min-width: 300px;">
+            <div class="input-group">
+                <input type="text" name="search" value="{{search}}" class="form-control" placeholder="Search by name...">
+                <button type="submit" class="btn btn-outline-secondary">GO</button>
+            </div>
+        </form>
+
+        <a href="{% url 'appointment_add' %}" class="btn btn-primary">+ Add Appointment</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover border shadow-sm align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Client Name</th>
+                    <th>Scheduled Date</th>
+                    <th>Scheduled Time</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr>
+                    <td class="fw-bold">{{ appointment.client.name }}</td>
+                    <td class="fw-bold">{{ appointment.scheduled_date }}</td>
+                    <td class="fw-bold">{{ appointment.scheduled_time }}</td>
+                    <td class="text-end">
+                        <div class="btn-group flex-column flex-sm-row">
+                            <a href="{% url 'appointment_edit' appointment.id %}" class="btn btn-sm btn-outline-primary mb-1 mb-sm-0">Edit</a>
+                            <a href="{% url 'appointment_delete' appointment.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center text-muted py-4">No appointments</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- bootstrap 5 pagination -->
+    {% include 'trainer/includes/_pagination.html' %}
+{% endblock %}

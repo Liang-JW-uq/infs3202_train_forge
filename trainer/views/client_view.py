@@ -1,32 +1,32 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.core.exceptions import ValidationError
-from orm.models import Client, Trainer
+from orm.models import Client, UserTrainer
 from ..forms import ClientForm
 
-logged_in_trainer = 1
+# logged_in_trainer = 1
 
 # These path start from trainer/templates/...
 def client_list(request):
 
     request.session["module"] = 'clients'
 
-    trainer = get_object_or_404(Trainer, pk=logged_in_trainer)
+    userTrainer = get_object_or_404(UserTrainer, pk=request.user.id)
     # clients = Client.objects.filter(trainer__id=logged_in_trainer)
-    clients = Client.objects.filter(trainer=trainer)
+    clients = Client.objects.filter(trainer=userTrainer)
     
     return render(request, "trainer/client/client_list.html", {"clients": clients})
 
 def client_add(request):
 
-    trainer = get_object_or_404(Trainer, pk=logged_in_trainer)
+    userTrainer = get_object_or_404(UserTrainer, pk=request.user.id)
     if request.method == "POST":
         form = ClientForm(request.POST)
         if form.is_valid():
             try:
                 # form.save()
                 client = form.save(commit=False)
-                client.trainer = trainer
+                client.trainer = userTrainer
                 client.save()
                 messages.success(request, "Client Saved!")
                 return redirect("client_list")
@@ -41,14 +41,14 @@ def client_add(request):
 
 def client_edit(request, pk):
     
-    trainer = get_object_or_404(Trainer, pk=logged_in_trainer)
-    client = Client.objects.get(id=pk, trainer=trainer)
+    userTrainer = get_object_or_404(UserTrainer, pk=request.user.id)
+    client = Client.objects.get(id=pk, trainer=userTrainer)
     if request.method == "POST":
         form = ClientForm(request.POST, instance=client)
         if form.is_valid():
             # form.save()
             client = form.save(commit=False)
-            client.trainer = trainer
+            client.trainer = userTrainer
             client.save()
             messages.success(request, "Client Saved!")
             return redirect("client_list")
@@ -59,11 +59,11 @@ def client_edit(request, pk):
 
 def client_delete(request, pk):
     
-    trainer = get_object_or_404(Trainer, pk=logged_in_trainer)
+    userTrainer = get_object_or_404(UserTrainer, pk=request.user.id)
     # clients = Client.objects.filter(trainer__id=logged_in_trainer)
 
     # clients = Client.objects.get(id=pk, trainer=trainer)  <-- Alternate way to only get first item instead of array
-    client = Client.objects.filter(id=pk, trainer=trainer).first()
+    client = Client.objects.filter(id=pk, trainer=userTrainer).first()
 
     if request.method == "POST":
         client.delete()

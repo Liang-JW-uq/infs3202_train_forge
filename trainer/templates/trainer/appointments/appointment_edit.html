@@ -1,0 +1,82 @@
+{% extends 'trainer/base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+        <h4 class="mb-2 mb-sm-0">Edit Appointments</h4>
+        <a href="{% url 'appointment_calendar' %}" class="btn btn-outline-secondary">Back</a>
+    </div>
+
+    <hr class="opacity-100" style="height:2px; background-color: #3ABEF9;" />
+
+    <div>
+        <form method="POST">
+            {% csrf_token %}
+
+            {% include "trainer\includes\_form_errors.html" %}
+            <!-- Form-containing div -->
+            <div class="border rounded p-4 mt-4">
+                <!-- Start of individual form elements -->
+
+                <!-- Client Select -->
+                <div class="row mb-3">
+                    <label for="{{ form.client.id_for_label}}" class="col-sm-2 col-form-label">
+                        {{ form.client.label }}
+                    </label>
+
+                    <div class="col-sm-10">
+                        {{ form.client }}
+
+                        {% for error in form.client.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Scheduled Date -->
+                <div class="row mb-3">
+                    <label for="{{ form.scheduled_date.id_for_label}}" class="col-sm-2 col-form-label">
+                        {{ form.scheduled_date.label }}
+                    </label>
+                    <div class="col-sm-10">
+                        {{ form.scheduled_date }}
+
+                        {% for error in form.scheduled_date.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Scheduled Time -->
+                <div class="row mb-3">
+                    <label for="{{ form.scheduled_time.id_for_label}}" class="col-sm-2 col-form-label">
+                        {{ form.scheduled_time.label }}
+                    </label>
+                    <div class="col-sm-10">
+                        {{ form.scheduled_time }}
+
+                        {% for error in form.scheduled_time.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- End of form -->
+            </div>
+            <!-- End of form-containing div -->
+
+            <!-- Button Section -->
+            <div class="row mb-3">
+                <button type="submit">Save</button>
+                <a href="{% url 'appointment_calendar' %} " class="btn btn-danger">Cancel</a>
+            </div>
+            
+        </form>
+        
+    </div>
+{% endblock %}

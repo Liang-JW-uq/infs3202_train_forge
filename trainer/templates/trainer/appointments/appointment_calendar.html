@@ -1,0 +1,57 @@
+{% extends 'trainer/base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+        <div class="flex-grow-1 flex-sm-grow-0" style="min-width: 300px;">
+            <h4 class="mb-2 mb-sm-0">Appointments</h4>
+        </div>
+
+        <div>
+            <a href="{% url 'appointment_calendar' %}" class="btn btn-secondary">Calendar View</a>
+            <a href="{% url 'appointment_list' %}" class="btn btn-primary">List View</a>
+        </div>
+    </div>
+
+    <hr class="opacity-100" style="height:2px; background-color: #3ABEF9;" />
+
+
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-12"> 
+                    <div class="pt-2"> 
+                        <div id="calendar"></div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            var calendarElement = document.getElementById("calendar")
+            var calendar = new FullCalendar.Calendar(calendarElement, {
+                initialView: "dayGridMonth",
+                height: "auto",
+                // headerToolbar: {
+                //     left: "prev, next"
+                // },
+                // events: [
+                //     {id: 1, title: "Robert Brown", start: "2026-04-10", end: "2026-04-12"},
+                //     {id: 2, title: "John Doe", start: "2026-04-11", end: "2026-04-12"}
+                // ],
+                events: "{% url 'get_trainer_appointments' %}",
+                dateClick: function(info) {
+                    window.location.href = "{% url 'appointment_add' %}?date=" + info.dateStr;
+                }
+            })
+
+            calendar.render()
+        })
+    </script>
+{% endblock %}

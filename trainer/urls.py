@@ -1,7 +1,7 @@
 from django.urls import path, include, reverse_lazy
 
 from .views import index_view, home_view, query_view, client_view, account_view
-from .views import tag_view, exercise_view
+from .views import tag_view, exercise_view, appointment_view
 
 from django.contrib.auth.decorators import login_required
 
@@ -38,4 +38,12 @@ urlpatterns = [
     path("client/add/", login_required(client_view.client_add), name="client_add"),
     path("client/edit/<int:pk>/", login_required(client_view.client_edit), name="client_edit"),
     path("client/delete/<int:pk>/", login_required(client_view.client_delete), name="client_delete"),
+
+    path("appointment/", login_required(appointment_view.appointment_list), name="appointment_list"),
+    path("appointment/add/", login_required(appointment_view.appointment_add), name="appointment_add"),
+    path("appointment/edit/<int:pk>/", login_required(appointment_view.appointment_edit), name="appointment_edit"),
+    path("appointment/delete/<int:pk>/", login_required(appointment_view.appointment_delete), name="appointment_delete"),
+
+    path("appointment/calendar", login_required(appointment_view.appointment_calendar), name="appointment_calendar"),
+    path("appointment/calendar/events", login_required(appointment_view.get_trainer_appointments), name="get_trainer_appointments")
 ]

@@ -30,13 +30,9 @@ class Appointment(models.Model):
 
     class Meta:
         # ????? workable to ensure no double booking ?????
-        unique_together = ['scheduled_date', 'scheduled_time']
+        unique_together = ['trainer', 'scheduled_date', 'scheduled_time']
         db_table  = "appointments"
 
-
-    ## for future overrding
-    def clean(self):
-        super().clean()
     
     def save(self, *args, **kwargs):
         # mnually trigger the validators when modelform not used

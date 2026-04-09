@@ -38,6 +38,8 @@ def exercise_list(request):
     return render(request, 'trainer/exercises/exercise_list.html', {'exercises': pager, 'search': search, 'page_obj': pager})
 
 def exercise_add(request):
+
+    request.session["module"] = 'exercises'
     
     userTrainer = UserTrainer.objects.get(id=request.user.id)
 
@@ -58,7 +60,7 @@ def exercise_add(request):
                 messages.success(request, "Exercise updated successfully")
                 return redirect("exercise_list")
             except ValidationError as e:
-                    form.add_error(None, str(e))
+                form.add_error(None, str(e))
             except Exception as e:
                 messages.error(request, f"Exceptions: {str(e)}")
         
@@ -73,6 +75,8 @@ def exercise_add(request):
     return render(request, "trainer/exercises/exercise_add.html", {"form": form})
 
 def exercise_edit(request, pk):
+
+    request.session["module"] = 'exercises'
 
     userTrainer = UserTrainer.objects.get(id=request.user.id)
 
@@ -110,6 +114,8 @@ def exercise_edit(request, pk):
     return render(request, "trainer/exercises/exercise_edit.html", {"form": form})
 
 def exercise_delete(request, pk):
+
+    request.session["module"] = 'exercises'
 
     userTrainer = UserTrainer.objects.get(id=request.user.id)
     exercise = Exercise.objects.filter(trainer=userTrainer, id=pk)
