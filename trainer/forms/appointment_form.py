@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from datetime import datetime, date
 
 from orm.models import Appointment, Client
 
@@ -42,3 +43,13 @@ class AppointmentForm(forms.ModelForm):
         if userTrainer:
             # this will create a list of clients when used in the template
             self.fields['client'].queryset = Client.objects.filter(trainer=userTrainer)
+
+    # Date Checking to prevent dates in the past from being chosen (Validators don't have this specific checking)
+    def clean(self):
+        cleaned_data = super().clean()
+
+        # this will check for inputs dates > current date, else raise error
+        if self.cleaned_data.get('scheduled_date') < date.today():
+            self.add_error("scheduled_date", "Must be a future date")
+
+        return cleaned_data

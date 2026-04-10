@@ -1,0 +1,244 @@
+GCP Setups
+
+
+COMPUTE ENGINE (MYSQL (MARIADB) ON LINUX (DEBIAN)
+=========================================================================================================
+1. Create a project
+	---- either from firebase or gcp console
+2. Compute Engine (for MySql)
+	REFERENCES
+	*** https://medium.com/codex/full-guide-install-mysql-phpmyadmin-on-google-cloud-compute-engine-vm-7e31d3f0d968
+	*** https://docs.cloud.google.com/compute/docs/instances/mysql/discover-mysql
+	STEPS
+	--- make sure the correct project is selected
+	--- enable compute engine service
+	--- create a VM instance
+		a. Machine Configuration
+		--- intance-pt-1
+		--- asia-southeast1
+		--- machine type - e2
+				 - e2-micro (2 vCPU, 1 core, 1GB Memory)
+		b. OS and Storage
+		--- Debian GNU/Linux 12
+		c. Data Protection
+		---  No Backups
+		d. Networking
+		--- DO NOT ALLOW Http/Https (its NOT for public, only for our Django App from App Engine)
+		--- Network Tags: mysql-pt-1
+		--- Hostname: (Leave blank)
+		--- IP Forwarding: (Keep off)
+		--- Network Interfaces: nic0 default IPv4 (10.148.0.0/20) - internal IP on the server
+		e. Observability
+		--- Ops Agent (Disable it)
+		f. Security
+		--- Service Account (just accept default)
+		--- Access Scopes : Allow default access
+		--- Shielded VM
+			--- Turn on Secure Boot (Disabled)
+			--- Turn on VTPM (Enable)
+			--- Turn on Integrity Monitoring (Enable)
+
+		--- Manage Access
+			--- Everyhing leave as the default
+		g.Advanced
+		--- Enable Delete protection (Enable)
+		--- Reservations: Dont use reservations
+		--- Data Encryption: Google managed encryption keys
+	--- CREATE
+
+	Go to the list of VM instances, select the newly created instance ("instance-pt-1")
+	--- select edit
+	--- Under Networking Interfaces
+		--- select the default nic0
+			--- Alias IP Ranges
+			--- Select Ephemeral (THIS WILL RESULT IN EXTERNAL CHANGING ON EVERY START)
+				**** IF SELECTED THE BELOW, STATIC IP ARE CHARGEABLE
+				--- Click "Reserve static external Ip Address"
+				--- name: instance-pt-1-external-ip
+				--- Click Reserve
+					--- External IP: 34.158.40.16 (auto generated)
+
+
+
+
+GOOGLE CLOUD CLI - FOR MAINTEANANCE OF GCP AND DEPLOYMENT OF APPLICATIONS
+=========================================================================================================
+0. Install Google Cloud CLI
+	--- https://docs.cloud.google.com/sdk/docs/install-sdk
+	--- Run the downloaded Google Cloud CLI installer
+	--- Enable the follow up checks at the end
+		--- [[ Maybe be prompted to sign in to GCP via the browser ]]
+		--- go thru all and select the google account to associate to
+	*** A new command window will open asking to select project
+ 		--- select project (personal-trainer-5b731)
+
+	open a new PowerShell command
+		--- gcloud config list
+		--- gcloud auth list
+		--- gcloud projects list
+		--- gcloud config set project [ProjectID]
+		--- gcloud services list --enabled
+		--- gcloud services list --enabled --filter="name:compute.googleapis.com"
+		
+		--- (general for compute engine services)
+			--- gcloud compute instances list/create/ssh
+			--- 
+
+		--- open new PowerShell
+			--- gcloud compute ssh [YOUR_VM_NAME] (name of create VM instance on Compute Engine)
+				--- will be prompted to create SSH keys (first time)
+		--- a new command prompt will be opened (this is already in the VM)
+			--- CMD: hostname (return VM name)
+
+		***********************************************************************
+		* for subsequent session, open up a powershell
+		* CMD: gcloud compute ssh instance-pt-1 
+		*	--- this will open another command prompt window
+		*
+		***********************************************************************
+	--- CMD: sudo apt update	(this is to update the linux with the latest patches)
+	--- CMD: sudo apt install default-mysql-server -y
+	
+	--- CMD: sudo mysql
+	--- CMD: CREATE DATABASE uni_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+	--- CMD: SHOW DATABASES;
+	--- CMD: CREATE USER 'pt_user'@'%' IDENTIFIED BY '123123123'
+	--- CMD: Select user, Host FROM mysql.user;
+	--- CMD: GRANT ALL PRIVILEGES ON unit_db.* TO 'pt_user'@'%';clear
+	--- CMD: FLUSH PRIVILEGES;
+	--- CMD: SHOW GRANTS FOR 'pt_user'@'%'; OR SHOW GRANTS FOR 'pt_user';
+	
+	configuring mysql settings on vm
+		NOTE: make sure there are NO more bind statements inside the file except for this
+	--- CMD: sudo systemctl restart mariadb
+	configire filewall to allow port 3306 for mysql from vm	
+		--- FIREWALL ON GCP CONSOLE
+			--- search for "firewall"
+			--- add new Firewall RUle
+				--- set a name
+				--- set port 3306
+	test connection
+		CMD:  Test-NetConnection 136.110.55.168 -Port 3306
+
+
+
+
+
+APP ENGINE
+=========================================================================================================
+0. REferences
+	--- https://bennett39.medium.com/deploying-a-django-application-to-google-app-engine-f9c91a30bd35
+	--- https://python.plainenglish.io/optimizing-django-for-google-cloud-platform-gcp-a-guide-to-cloud-deployment-62dc4e8ea8da
+	--- https://arindam-das.medium.com/getting-started-with-google-app-engine-a-complete-guide-with-hands-on-examples-4be1f231510e
+	--- https://codelabs.developers.google.com/codelabs/cloud-app-engine-python3#0
+
+1. Create / Select Project
+2. Search App Engine from GCP Console search bar
+3. Create Application
+	--- select region: asia-southeast1 (should be the same region as the VM)
+	--- Indentity and API access
+	--- NEXT
+ 	Resources - Python
+	Environment - Standard
+4. Permissions
+	--- we have to enable some permission to store codes and also for build scripts on the app engine
+	--- GO to IAM admin
+		--- select the project / service account (ersonal-trainer-5b731@appspot.gserviceaccount.com)
+		--- select  edit and from the right pane
+			--- add another role
+			1. Storage Admin
+			2. Cloud Build Services
+
+	Download Google Cloud SDK if have not done so
+4. Configuring from Cloud CLI (local using PowerShell)
+	******** RMB TO SWITCH TO YOUR DJANGO PROJECT ROOT FOLDER ***********
+	******** OR USE VSCODE TERMINAL **********
+	--- CMD: gcloud auth list		(check current login)
+	--- CMD: gcloud config list		(check current selected project)
+		--- CMD: gcloud project list				(list all projects in your account)
+		--- CMD: gcloud config set project <<project-id>>	(to change to another project)
+
+	--- CMD: gcloud config get-value project (just to reconfimr we are on the right project)
+4  Add requirements.txt
+	--- Django>=6
+	--- gunicorn
+	--- mysqlclient
+
+4  Static files
+	--- CMD: py manage.py collectstatic
+		--- this will create a staticfiles folder (and copy static/ files over)
+4 Settings.py
+	a. 	DEBUG = False
+		ALLOWED_HOSTS = ['*']	# For school project, this is fine
+
+	b. 	STATIC_URL = '/static/'
+		STATICFILES_DIRS = [
+    			os.path.join(BASE_DIR, 'static'),
+		]
+		STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+	c. 
+  
+5. Configuring django project
+	--- from project root 
+	--- create app.yaml
+		--- 	runtime: python312  # Match your local version if possible
+			env: standard
+			instance_class: F1
+
+			# config here is referring to the django project config folder (or maybe the same name as the project)
+			entrypoint: gunicorn -b :$PORT config.wsgi
+
+			env_variables:
+  			  # IMPORTANT: Update this IP every time you restart your VM!, THIS IS FOR DEPLOYED APP, NOT WHEN DEBUGGING WHICH IS REFERRING SETTINGS.PY
+  	  <<two spaces>>  DB_HOST: "34.x.x.x" 
+  	  <<two spaces>>  DB_NAME: "uni_db"
+  	  <<two spaces>>  DB_USER: "pt_user"
+  	  <<two spaces>>  DB_PASS: "123123123"
+	
+	--- create .gcloudignore
+	
+	--- create .gitignore (optional)
+
+6. app.yaml
+	--- 	runtime: python312
+		env: standard
+		instance_class: F1
+
+		entrypoint: gunicorn -b :$PORT config.wsgi
+
+		handlers:
+  		  - url: /static
+    		    static_dir: staticfiles
+
+	  	  - url: /.*
+    		    script: auto
+
+		env_variables:
+  		  DB_HOST: "34.142.192.182"
+  		  DB_NAME: "uni_db"
+  		  DB_USER: "pt_user"
+  		  DB_PASS: "123123123"
+
+				
+CHECK APP ENGINCE
+------------------
+CMD: gcloud app describe
+
+
+- CMD: gcloud app deploy
+---------------------------
+Services to deploy:
+descriptor:                  [C:\Development\uq\semester 3\infs3202\project\simulation\book_project_intermediate\app.yaml]
+source:                      [C:\Development\uq\semester 3\infs3202\project\simulation\book_project_intermediate]
+target project:              [personal-trainer-5b731]
+target service:              [default]
+target version:              [20260313t085951]
+target url:                  [https://personal-trainer-5b731.as.r.appspot.com]
+target service account:      [personal-trainer-5b731@appspot.gserviceaccount.com]
+
+	
+For debugging / logs for App Engine
+-----------------------------------
+--- CMD: gcloud app logs read
+--- CMD: gcloud app logs tail
+--- CMD: gcloud app instances list
