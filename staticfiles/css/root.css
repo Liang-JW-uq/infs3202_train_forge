@@ -1,0 +1,111 @@
+/* root.css */
+
+:root {
+  --bs-body-font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+}  
+
+body {
+  font-family: var(--bs-body-font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.table thead tr th { 
+    opacity: 0.6 !important;
+    font-weight: 100;
+}
+
+.col-form-label {
+    opacity: 0.6 !important; 
+}
+
+
+
+
+/* ==========================================================================
+   AI: FullCalendar 6 Custom Overrides
+   ========================================================================== */
+
+/* 1. Force Full Width */
+#calendar {
+    width: 100% !important;
+    display: block !important;
+}
+
+.fc-view-harness, 
+.fc-view-harness-active, 
+.fc-scroller, 
+.fc-scroller-harness, 
+.fc-scrollgrid, 
+.fc-list-table {
+    width: 100% !important;
+    min-width: 100% !important;
+}
+
+/* 2. Clean up Day Headers (No Underline + Smaller Font) */
+.fc-list-day-cushion {
+    background-color: #2c3034 !important;
+    padding: 8px 12px !important;
+}
+
+/* Remove underlines from the header links */
+.fc-list-day-cushion a {
+    text-decoration: none !important;
+    box-shadow: none !important;
+    color: #198754 !important;
+    font-weight: 600;
+    font-size: 0.9rem !important;
+}
+
+/* 3. Event Styling (No Underline + Smaller Font) */
+.fc-list-event-title {
+    font-size: 0.85rem !important;
+}
+
+.fc-list-event-title a {
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+/* 4. Table UI Fixes */
+.fc-theme-bootstrap5 thead {
+    background-color: transparent !important;
+}
+
+.fc-list-event:hover td {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* --- Grid View Fixes (Week/Month) --- */
+
+/* 1. Remove underline from top headers (Sun 3/29, Mon 3/30, etc.) */
+.fc-col-header-cell-cushion {
+    text-decoration: none !important;
+    color: #198754 !important; /* Your success green */
+    font-size: 0.85rem !important;
+    font-weight: 600;
+}
+
+/* 2. Remove underline from the blue/cyan event blocks */
+.fc-daygrid-event {
+    text-decoration: none !important;
+}
+
+.fc-event-title, .fc-event-main {
+    text-decoration: none !important;
+}
+
+/* 3. If the dates inside the squares (in Month view) are underlined */
+.fc-daygrid-day-number {
+    text-decoration: none !important;
+    color: #adb5bd !important; /* Muted text color */
+    font-size: 0.8rem !important;
+}
+
+/* 4. Fix hover state so it doesn't reappear */
+.fc-col-header-cell-cushion:hover,
+.fc-daygrid-day-number:hover,
+.fc-event:hover {
+    text-decoration: none !important;
+    color: inherit;
+}

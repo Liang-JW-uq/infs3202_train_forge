@@ -45,11 +45,11 @@ class AppointmentForm(forms.ModelForm):
             self.fields['client'].queryset = Client.objects.filter(trainer=userTrainer)
 
     # Date Checking to prevent dates in the past from being chosen (Validators don't have this specific checking)
-    def clean(self):
-        cleaned_data = super().clean()
+    # def clean(self):
+    #     cleaned_data = super().clean()
 
-        # this will check for inputs dates > current date, else raise error
-        if self.cleaned_data.get('scheduled_date') < date.today():
-            self.add_error("scheduled_date", "Must be a future date")
+    #     # this will check for inputs dates > current date, else raise error
+    #     if self.cleaned_data.get('scheduled_date') < date.today():
+    #         self.add_error("scheduled_date", "Must be a future date")
 
-        return cleaned_data
+    #     return cleaned_data

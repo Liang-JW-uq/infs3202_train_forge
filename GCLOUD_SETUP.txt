@@ -70,7 +70,7 @@ GOOGLE CLOUD CLI - FOR MAINTEANANCE OF GCP AND DEPLOYMENT OF APPLICATIONS
 		--- [[ Maybe be prompted to sign in to GCP via the browser ]]
 		--- go thru all and select the google account to associate to
 	*** A new command window will open asking to select project
- 		--- select project (personal-trainer-5b731)
+ 		--- select project (uq-train-forge)
 
 	open a new PowerShell command
 		--- gcloud config list
@@ -143,7 +143,7 @@ APP ENGINE
 4. Permissions
 	--- we have to enable some permission to store codes and also for build scripts on the app engine
 	--- GO to IAM admin
-		--- select the project / service account (ersonal-trainer-5b731@appspot.gserviceaccount.com)
+		--- select the project / service account (uq-train-forge@appspot.gserviceaccount.com)
 		--- select  edit and from the right pane
 			--- add another role
 			1. Storage Admin
@@ -228,13 +228,13 @@ CMD: gcloud app describe
 - CMD: gcloud app deploy
 ---------------------------
 Services to deploy:
-descriptor:                  [C:\Development\uq\semester 3\infs3202\project\simulation\book_project_intermediate\app.yaml]
-source:                      [C:\Development\uq\semester 3\infs3202\project\simulation\book_project_intermediate]
-target project:              [personal-trainer-5b731]
+descriptor:                  [C:\UQ_FOLDER\Y3_S1_Feb2026\Infs3202-Web_Info_System\project\infs3202_train_forge\app.yaml]
+source:                      [C:\UQ_FOLDER\Y3_S1_Feb2026\Infs3202-Web_Info_System\project\infs3202_train_forge]
+target project:              [uq-train-forge]
 target service:              [default]
-target version:              [20260313t085951]
-target url:                  [https://personal-trainer-5b731.as.r.appspot.com]
-target service account:      [personal-trainer-5b731@appspot.gserviceaccount.com]
+target version:              [20260411t222310]
+target url:                  [https://uq-train-forge.as.r.appspot.com]
+target service account:      [uq-train-forge@appspot.gserviceaccount.com]
 
 	
 For debugging / logs for App Engine

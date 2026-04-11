@@ -1,0 +1,12 @@
+runtime: python312
+env: standard
+instance_class: F1
+
+entrypoint: gunicorn -b :$PORT config.wsgi
+
+handlers:
+  - url: /static
+    static_dir: staticfiles
+
+  - url: /.*
+    script: auto
