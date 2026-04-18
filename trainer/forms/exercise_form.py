@@ -28,7 +28,7 @@ class ExerciseForm(forms.ModelForm):
         }
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'instructions': forms.Textarea(attrs={'class': 'form-control'}),
+            'instructions': forms.Textarea(attrs={'class': 'form-control', "rows": 3}),
             'def_sets': forms.NumberInput(attrs={'class': 'form-control', "value": 99}),
             'def_reps': forms.NumberInput(attrs={'class': 'form-control', "value": 0}),
             'def_weight': forms.NumberInput(attrs={'class': 'form-control', "value": 0}),

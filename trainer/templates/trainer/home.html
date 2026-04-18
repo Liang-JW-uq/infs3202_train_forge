@@ -15,8 +15,8 @@
                         
                         <!-- LEFT: Big number -->
                         <div class="col-6 text-center border-end">
-                            <div class="display-2 text-white">12</div>
-                            <small class="text-body-secondary">Clients</small>
+                            <div class="display-2 text-white">{{summary.client_count}}</div>
+                            <small class="text-body-secondary"></small>
                         </div>
 
                         <!-- RIGHT: Vertical stack -->
@@ -49,51 +49,53 @@
                     <div class="row text-center">
                         <!-- Metric 1 -->
                         <div class="col-6">
-                            <h1 class="display-3 text-white mb-0">5</h1>
+                            <h1 class="display-3 text-white mb-0">{{ summary.tags_count }}</h1>
                             <small class="text-body-secondary">Tags</small>
                         </div>
 
                         <!-- Metric 2 -->
                         <div class="col-6">
-                            <h1 class="display-3 text-white mb-0">22</h1>
+                            <h1 class="display-3 text-white mb-0">{{ summary.exercise_count }}</h1>
                             <small class="text-body-secondary">Exercises</small>
                         </div>
                     </div>
 
+                    {%comment%}
                     <div class="mt-3 text-center">
                         <a href="#" class="btn btn-sm btn-outline-success">View Details</a>
                     </div>
+                    {%endcomment%}
                 </div>
             </div>
         </div>
         <div class="col">
             <div class="card h-100 bg-dark shadow-sm">
                 <div class="card-body">
-                    <h6 class="card-title text-success mb-3 text-end">Programs</h6>
+                    <h6 class="card-title text-success mb-3 text-end">Workouts</h6>
 
                     <div class="row align-items-center">
                         <!-- RIGHT: Vertical stack -->
                         <div class="col-6  border-end">
                             <div class="d-flex justify-content-between">
                                 <span class="text-body-secondary">Not Started</span>
-                                <span class="fw-bold text-success">3</span>
+                                <span class="fw-bold text-success">x</span>
                             </div>
 
                             <div class="d-flex justify-content-between">
                                 <span class="text-body-secondary">In Progress</span>
-                                <span class="fw-bold text-info">5</span>
+                                <span class="fw-bold text-info">{{summary.workouts.pending}}</span>
                             </div>
 
                             <div class="d-flex justify-content-between">
                                 <span class="text-body-secondary">Completed</span>
-                                <span class="fw-bold text-secondary">4</span>
+                                <span class="fw-bold text-secondary">{{summary.workouts.completed}}</span>
                             </div>
                         </div>
                         
                         <!-- LEFT: Big number -->
                         <div class="col-6 text-center">
-                            <div class="display-2 text-white">12</div>
-                            <small class="text-body-secondary">Clients</small>
+                            <div class="display-2 text-white">{{summary.workouts.total}}</div>
+                            <small class="text-body-secondary"></small>
                         </div>
                     </div>
                 </div>
@@ -129,7 +131,7 @@
             initialView: "listMonth",
             height: "auto",
             events: "{% url 'get_trainer_appointments' %}",
-            
+            displayEventTime: false
         })
 
         calendar.render()

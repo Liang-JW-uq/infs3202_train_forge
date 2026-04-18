@@ -12,6 +12,8 @@ from ..forms import AppointmentForm
 
 from orm.models import UserTrainer, Appointment
 
+from django.db.models import Q
+
 UserTrainer = get_user_model()
 
 def appointment_list(request):
@@ -24,7 +26,7 @@ def appointment_list(request):
     # We MUST order by something, otherwise will screw up paginator ordering when swapping pages
     if search:
         # icontains to ignore char case
-        appointments = Appointment.objects.filter(trainer=trainer, client__name__icontains=search).order_by('client__name')
+        appointments = Appointment.objects.filter(trainer=trainer, client__name__icontains=search).order_by('client__name').select_related("client")
     else:     
         appointments = Appointment.objects.filter(trainer=trainer).order_by('client__name')
 
@@ -139,7 +141,7 @@ def get_trainer_appointments(request):
             "title": f"{title_prefix} {appointment.client.name}",
             "start": appointment.scheduled_date,
             "backgroundColor": bg_color,
-            "allDay": True,
+            # "allDay": True,
             "url": f"/appointment/edit/{appointment.id}"
         })
 

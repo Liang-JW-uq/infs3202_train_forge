@@ -64,6 +64,7 @@ def tag_add(request):
 def tag_edit(request, pk):
     userTrainer = UserTrainer.objects.get(id=request.user.id)
     tag = Tag.objects.get(id=pk, trainer=userTrainer)
+    affected_exercises = tag.exercises.all()
 
     if request.method == "POST":
         form = TagForm(request.POST, instance=tag)
@@ -82,7 +83,7 @@ def tag_edit(request, pk):
         form = TagForm(instance=tag)
 
 
-    return render(request, "trainer/tags/tag_edit.html", {"form": form})
+    return render(request, "trainer/tags/tag_edit.html", {"form": form, "affected_exercises": affected_exercises})
 
 def tag_delete(request, pk):
     userTrainer = UserTrainer.objects.get(id=request.user.id)
@@ -97,6 +98,5 @@ def tag_delete(request, pk):
             messages.error(request, f"Exceptions: {str(e)}")
     else:
         pass
-
 
     return render(request, "trainer/tags/tag_delete.html", {"tag": tag})

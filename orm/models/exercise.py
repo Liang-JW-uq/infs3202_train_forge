@@ -46,7 +46,7 @@ class Exercise(models.Model):
     # saas requirement - tenant
     trainer = models.ForeignKey(
         Trainer, 
-        on_delete=models.RESTRICT,      # no deletion of trainer if clients still exists (DB and model)
+        on_delete=models.RESTRICT,      # no deletion of trainer if exercise still exists (DB and model)
                                         # PROTECT only for django model checks 
         related_name='exercises'
     )
@@ -65,6 +65,7 @@ class Exercise(models.Model):
 
 
     class Meta:
+        unique_together = ['trainer', 'name']
         db_table = 'exercises'
 
     def save(self, *args, **kwargs):

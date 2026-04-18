@@ -21,17 +21,28 @@
             <!-- Tag Name -->
             <div class="border rounded p-4 mt-4">
                 <div class="row mb-3">
-                    <label for="{{ form.name.id_for_label}}" class="col-12 col-md-2 col-form-label">
-                        {{ form.name.label }}
-                    </label>
-                    
-                    <div class="col-12 col-md">
-                        {{ form.name }}
+                    <div class="col-12 col-md-8 col-lg-8">
+                        <label for="{{ form.name.id_for_label}}" class="col-12 col-md-2 col-form-label">
+                            {{ form.name.label }}
+                        </label>
+                        
+                        <div class="col-12 col-md">
+                            {{ form.name }}
 
-                        {% for error in form.name.errors %}
-                            <div class="text-danger small">{{ error }}</div>
+                            {% for error in form.name.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+
+                    <div class="col-12 col-md-4 col-md-4">
+                        <h5>Are you sure you want to change this? The following exercises will be affected:</h5>
+                        {% for exercise in affected_exercises %}
+                            <h6>{{exercise.name}}</h6>
                         {% endfor %}
                     </div>
+                    
                 </div>
             </div>
 

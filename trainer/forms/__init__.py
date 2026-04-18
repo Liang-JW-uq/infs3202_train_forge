@@ -3,3 +3,4 @@ from .account_form import AccountForm
 from .tag_form import TagForm
 from .exercise_form import ExerciseForm
 from .appointment_form import AppointmentForm
+from .workout_form import WorkoutForm, WorkoutExerciseForm, WorkoutExerciseFormSet

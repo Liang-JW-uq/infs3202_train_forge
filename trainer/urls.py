@@ -1,7 +1,7 @@
 from django.urls import path, include, reverse_lazy
 
 from .views import index_view, home_view, query_view, client_view, account_view
-from .views import tag_view, exercise_view, appointment_view
+from .views import tag_view, exercise_view, appointment_view, workout_view
 
 from django.contrib.auth.decorators import login_required
 
@@ -45,5 +45,10 @@ urlpatterns = [
     path("appointment/delete/<int:pk>/", login_required(appointment_view.appointment_delete), name="appointment_delete"),
 
     path("appointment/calendar", login_required(appointment_view.appointment_calendar), name="appointment_calendar"),
-    path("appointment/calendar/events", login_required(appointment_view.get_trainer_appointments), name="get_trainer_appointments")
+    path("appointment/calendar/events", login_required(appointment_view.get_trainer_appointments), name="get_trainer_appointments"),
+
+    path("workout/", login_required(workout_view.workout_list), name="workout_list"),
+    path("workout/add/", login_required(workout_view.workout_add), name="workout_add"),
+    path("workout/edit/<int:pk>/", login_required(workout_view.workout_edit), name="workout_edit"),
+    path("workout/delete/<int:pk>/", login_required(workout_view.workout_delete), name="workout_delete")
 ]

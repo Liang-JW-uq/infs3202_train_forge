@@ -10,12 +10,12 @@ class Tag(models.Model):
     )
     name = models.CharField(
         max_length=50,
-        validators=[MinLengthValidator(5)],
-        unique=True
+        validators=[MinLengthValidator(5)]
     )
     
 
     class Meta:
+        unique_together = ['trainer', 'name']
         db_table="tags"
 
     def save(self, *args, **kwargs):
