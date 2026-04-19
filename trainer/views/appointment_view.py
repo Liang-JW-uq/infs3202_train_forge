@@ -31,7 +31,7 @@ def appointment_list(request):
         appointments = Appointment.objects.filter(trainer=trainer).order_by('client__name')
 
     # page controls - paginators with model data - 4 rows per page
-    paginator = Paginator(appointments, 4)
+    paginator = Paginator(appointments, 6)
     page_number = request.GET.get('page')
     try:
         pager = paginator.get_page(page_number)
@@ -43,6 +43,8 @@ def appointment_list(request):
     return render(request, 'trainer/appointments/appointment_list.html', {'appointments': pager, 'search': search, 'page_obj': pager})
 
 def appointment_calendar(request):
+
+    request.session["module"] = 'appointment'
 
     return render(request, "trainer/appointments/appointment_calendar.html")
 
@@ -114,7 +116,7 @@ def appointment_delete(request, pk):
     else:
         pass
 
-    return render(request, "trainer/appointments/appointment_delete.html")
+    return render(request, "trainer/appointments/appointment_delete.html", {'appointment': appointment})
 
 
 
@@ -129,7 +131,7 @@ def get_trainer_appointments(request):
         bg_color = ""
         if appointment.scheduled_time == "Morning":
             title_prefix = "(M)"
-            bg_color = "#FFB20D"
+            bg_color = "#785302"
         elif appointment.scheduled_time == "Afternoon":
             title_prefix = "(A)"
             bg_color = "#1334AD"

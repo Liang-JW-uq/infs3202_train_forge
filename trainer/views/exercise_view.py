@@ -5,6 +5,7 @@ from django.db import transaction
 from orm.models import Tag, Exercise, UserTrainer
 from django.core.exceptions import ValidationError
 from django.contrib import messages
+from django.http import JsonResponse
 
 from ..forms import ExerciseForm
 
@@ -26,7 +27,7 @@ def exercise_list(request):
     # tags =  tags.annotate(exercise_count = Count('tags_exercises'))
 
     # page controls - paginators with model data - 4 rows per page
-    paginator = Paginator(exercises, 4)
+    paginator = Paginator(exercises, 6)
     page_number = request.GET.get('page')
     try:
         pager = paginator.get_page(page_number)
@@ -118,7 +119,7 @@ def exercise_delete(request, pk):
     request.session["module"] = 'exercises'
 
     userTrainer = UserTrainer.objects.get(id=request.user.id)
-    exercise = Exercise.objects.filter(trainer=userTrainer, id=pk)
+    exercise = Exercise.objects.get(trainer=userTrainer, id=pk)
     if request.method == 'POST':
         try:
             exercise.delete()
@@ -127,5 +128,18 @@ def exercise_delete(request, pk):
         except Exception as e:
             messages.error(request, f"Exceptions: {str(e)}")
     else:
-        form = ExerciseForm(instance=exercise)
-    return render(request, "trainer/exercises/exercise_delete.html", {"form": form})
+        pass
+    return render(request, "trainer/exercises/exercise_delete.html", {"exercise": exercise})
+
+def get_exercises_by_tags(request, tag_ids):
+    trainer = get_object_or_404(UserTrainer, id=request.user.id)
+    tag_array = tag_ids.split(',')
+    tags = [int(tag.strip()) for tag in tag_array   ]
+    exercises = Exercise.objects.filter(trainer=trainer, tags__id__in = tags).order_by("id").values()
+    # exercise_list = []
+    # for exercise in exercises:
+    #     exercise_list.append(exercise.model_dump())
+    # id = client_info['id']
+    # id = client_info.get('id')
+
+    return JsonResponse(list(exercises), safe=False)

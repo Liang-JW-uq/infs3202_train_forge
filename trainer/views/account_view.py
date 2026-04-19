@@ -10,6 +10,10 @@ from ..forms import AccountForm
 
 UserTrainer = get_user_model()
 
+def social_login(request):
+    user = request.user
+    if user.is_authenticated:
+        return redirect('home')
 
 def login_page(request):
     form = AccountForm(request.POST or None)

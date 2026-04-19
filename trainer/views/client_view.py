@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from django.http import JsonResponse
 from orm.models import Client, UserTrainer
 from ..forms import ClientForm
 
@@ -72,3 +73,14 @@ def client_delete(request, pk):
         return redirect("client_list")
 
     return render(request, "trainer/client/client_delete.html", {"client": client})
+
+
+def get_client_info(request, pk):
+    trainer = get_object_or_404(UserTrainer, id=request.user.id)
+    client = Client.objects.get(id=pk, trainer=trainer)
+    client_info = {"id": client.id, "goals": client.goals, 'age': client.age, 'weight': client.weight, 'height': client.height}
+
+    # id = client_info['id']
+    # id = client_info.get('id')
+
+    return JsonResponse(client_info, safe=False)

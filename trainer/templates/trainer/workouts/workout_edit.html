@@ -1,0 +1,146 @@
+{% extends 'trainer/base.html' %}
+
+{% block custom_styles %}
+    {% load static %}
+    <link href="{% static 'css/workout.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+    <h3 class="mb-2 mb-sm-0">edit workout program</h3>
+    <a href="{% url 'workout_list' %}" class="btn btn-outline-secondary">Back</a>
+</div>
+
+<hr class="opacity-100" style="height:5px; background-color: #FF8A08;" />
+
+<div class="container-fluid mt-4">
+    <form id="workout-form" method="POST">
+        {% csrf_token %}
+        
+        <div class="row">
+            <div class="col-12 col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0">Client</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-sm-10">
+                                {{ form.client }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-3">
+                                <!-- <label class="form-label small" for="client-goals">Goals</label> -->
+                                <textarea class="form-control" disabled readonly id="client-goals" rows="3">
+                                    {{form.instance.client.goals}}
+                                </textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.trainer_review.id_for_label }}" class="form-label">
+                                    {{ form.trainer_review.label}}
+                                </label>           
+                                {{ form.trainer_review}}
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.client_remarks.id_for_label }}" class="form-label"> 
+                                    {{ form.client_remarks.label}}
+                                </label>
+                                {{ form.client_remarks}}
+                            </div>                                                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-8 col-lg-8">
+                {% include 'trainer/includes/_form_errors.html' %}
+                
+                <div class="d-flex justify-content-between">
+                    <h5>Exercises</h5>
+                    <div class="form-check form-switch">
+                        {{ form.is_completed }}
+                        <label class="form-check-label" for="{{form.is_completed.id_for_label}}">Workout Completed?</label>
+                    </div>
+                </div>
+                {{ formset.management_form }}
+                
+                <div id="formset-container">
+                    {% for ex_form in formset %}
+                        {{ ex_form.id }}
+                        <div class="card p-2 shadow-sm p-2">
+                            <div class="row g-2 mb-1">
+                                <div class="col-md-4 col-12">
+                                    {{ ex_form.exercise }}
+                                </div>
+                                <div class="col-md-2 col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">Sets</span>
+                                        {{ ex_form.pre_sets }}
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">Reps</span>
+                                        {{ ex_form.pre_reps }}
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">Weight</span>
+                                        {{ ex_form.pre_weight }}
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">Dur</span>
+                                        {{ ex_form.pre_duration }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row g-2">
+                                <div class="col-md-4">
+                                    <div class="form-check form-switch">
+                                        {{ ex_form.is_done }}
+                                        <label class="form-check-label" for="{{ex_form.is_done.id_for_label}}">Done?</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-4">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">Sets</span>
+                                        {{ ex_form.actual_sets }}
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-4">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">Reps</span>
+                                        {{ ex_form.actual_reps }}
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-4">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">Weight</span>
+                                        {{ ex_form.actual_weight }}
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-4">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">Dur</span>
+                                        {{ ex_form.actual_duration }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" name="save_workout" class="btn btn-success flex-grow-1 py-2">Save Workout Plan</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

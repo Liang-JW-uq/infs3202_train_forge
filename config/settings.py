@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_django',
     'orm',
     'trainer',
 ]
@@ -101,12 +102,20 @@ DATABASES = {
     # }
     'default': {
         'ENGINE'    : 'django.db.backends.mysql',
-        'NAME'      : 'trainforge_db',
-        'USER'      : 'root',
-        'PASSWORD'  : 'Aeiou321',
-        'HOST'      : 'localhost',
-        'PORT'      : '3306'
+        'NAME'      : 'defaultdb',
+        'USER'      : 'avnadmin',
+        'PASSWORD'  : 'AVNS_EDD9dfaVWJiv9uwcT7b',
+        'HOST'      : 'mysql-23d746ff-jitweiliang-uq-train-forge-db.f.aivencloud.com',
+        'PORT'      : '26456'
     } 
+    # 'default': {
+    #     'ENGINE'    : 'django.db.backends.mysql',
+    #     'NAME'      : 'trainforge_db',
+    #     'USER'      : 'root',
+    #     'PASSWORD'  : 'Aeiou321',
+    #     'HOST'      : 'localhost',
+    #     'PORT'      : '3306'
+    # } 
     # 'default': {
     #     'ENGINE'    : 'django.db.backends.mysql',
     #     'NAME'      : 'db30',
@@ -121,8 +130,14 @@ DATABASES = {
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
 
+# LOGIN_URL = 'login' 
+# LOGIN_REDIRECT_URL = 'home'
+# LOGOUT_REDIRECT_URL = 'index'
+
+# using path names
 LOGIN_URL = 'login' # These go by the ****name**** in urls.py, NOT the URL String/Param
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'social_login'         ## this is to facilitate the post social login checking
+                                            ## normal django auth will be redirected from the view
 LOGOUT_REDIRECT_URL = 'index'
 
 # customized User with is_trainer indicator
@@ -141,6 +156,49 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# This is for social-auth login
+# =================================== SOCIAL LOGINS =========================================== #
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.github.GithubOAuth2',
+    'django.contrib.auth.backends.ModelBackend',  # Keep for username/password login
+)
+
+# Google OAuth2
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "340196783603-d25rdkbln10vbrotrtdunq751sl1dpij.apps.googleusercontent.com"
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+]
+
+# Github OAuth2
+SOCIAL_AUTH_GITHUB_KEY = "123"
+SOCIAL_AUTH_GITHUB_SECRET = "123"
+SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']           # make sureto get email
+
+
+
+SOCIAL_AUTH_RAISE_EXCEPTIONS = True
+SOCIAL_AUTH_LOGIN_ERROR_URL = 'login'
+
+# 3. CRITICAL: Add this to clear the partial session on failure
+SOCIAL_AUTH_CLEAN_USER_KEEP_SESSION = True
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
+    'prompt': 'select_account'
+}
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.social_auth.associate_by_email',  # Finds your record
+    'social_core.pipeline.social_auth.associate_user',      # <--- THE MISSING LINK
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
 
 
 # Internationalization

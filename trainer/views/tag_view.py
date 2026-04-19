@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Count
 from orm.models import Tag, UserTrainer
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import ValidationError
 from django.contrib import messages
+from django.http import JsonResponse
 
 from ..forms import TagForm
 
@@ -26,7 +27,7 @@ def tag_list(request):
 
 
     # page controls - paginators with model data - 4 rows per page
-    paginator = Paginator(tags, 4)
+    paginator = Paginator(tags, 6)
     page_number = request.GET.get('page')
     try:
         pager = paginator.get_page(page_number)
@@ -100,3 +101,14 @@ def tag_delete(request, pk):
         pass
 
     return render(request, "trainer/tags/tag_delete.html", {"tag": tag})
+
+def get_trainer_tags(request):
+    trainer = get_object_or_404(UserTrainer, id=request.user.id)
+    tags = Tag.objects.filter(trainer=trainer).order_by("id")
+    tag_list = []
+    for tag in tags:
+        tag_list.append({"id": tag.id, "name": tag.name})
+    # id = client_info['id']
+    # id = client_info.get('id')
+
+    return JsonResponse(tag_list, safe=False)

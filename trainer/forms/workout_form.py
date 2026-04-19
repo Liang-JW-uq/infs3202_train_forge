@@ -1,5 +1,5 @@
 from django import forms
-from orm.models import Workout, WorkoutExercise
+from orm.models import Workout, WorkoutExercise, Client
 from django.core.validators import MinLengthValidator
 from django.forms import inlineformset_factory
 
@@ -7,12 +7,53 @@ class WorkoutForm(forms.ModelForm):
     class Meta:
         model = Workout
         fields = ['client', 'is_completed', 'trainer_review', 'client_remarks', 'ai_feedback']
+        widgets = {
+            'client': forms.Select(attrs={'class': 'form-control'}),
+            'trainer_review': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'client_remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
+        }
+        labels = {
+            'client': 'Select a client:'
+        }
+    
+    def __init__(self, *args, **kwargs):
+        # **kwargs = {'instance': instance, 'trainer': trainer'} from the views for edit/add
+
+        # have to remote this trainer from **kwargs
+        # we use this trainer to filter exercises for this trainer only (Saas)
+        userTrainer = kwargs.pop("userTrainer", None)
+        # when calling superclass/parent, **kwargs can be only one item
+        # we have remove the trainer from **kwargs using pop above
+        super().__init__(*args, **kwargs)
+
+        if userTrainer:
+            # this will create a list of tags when used in the template
+            self.fields['client'].queryset = Client.objects.filter(trainer=userTrainer)
 
 
 class WorkoutExerciseForm(forms.ModelForm):
     class Meta:
         model = WorkoutExercise
-        fields = ['exercise', 'is_done', 'pre_sets', 'pre_reps', 'pre_weight', 'pre_duration']
+        fields = ['exercise', 'is_done', 'pre_sets', 'pre_reps', 'pre_weight', 'pre_duration',
+                  'actual_sets', 'actual_reps', 'actual_weight', 'actual_duration']
+        widgets = {
+            'pre_sets': forms.NumberInput(attrs={'class': 'form-control bg-secondary', 'readonly': True}),
+            'pre_reps': forms.NumberInput(attrs={'class': 'form-control bg-secondary', 'readonly': True}),
+            'pre_weight': forms.NumberInput(attrs={'class': 'form-control bg-secondary', 'readonly': True}),
+            'pre_duration': forms.NumberInput(attrs={'class': 'form-control bg-secondary', 'readonly': True}),
+            'actual_sets': forms.NumberInput(attrs={'class': 'form-control'}),
+            'actual_reps': forms.NumberInput(attrs={'class': 'form-control'}),
+            'actual_weight': forms.NumberInput(attrs={'class': 'form-control'}),
+            'actual_duration': forms.NumberInput(attrs={'class': 'form-control'})
+        }
+        labels = {
+            
+        }
+
+
+
+
+
 
 
 # This is to allow nested WorkoutExercise Forms underneath each Workout as an "Inline Formset"
