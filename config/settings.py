@@ -166,17 +166,17 @@ AUTHENTICATION_BACKENDS = (
 )
 
 # Google OAuth2
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "340196783603-d25rdkbln10vbrotrtdunq751sl1dpij.apps.googleusercontent.com"
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-    'https://www.googleapis.com/auth/userinfo.email',
-    'https://www.googleapis.com/auth/userinfo.profile',
-]
+# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "340196783603-d25rdkbln10vbrotrtdunq751sl1dpij.apps.googleusercontent.com"
+# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
+# SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+#     'https://www.googleapis.com/auth/userinfo.email',
+#     'https://www.googleapis.com/auth/userinfo.profile',
+# ]
 
 # Github OAuth2
-SOCIAL_AUTH_GITHUB_KEY = "123"
-SOCIAL_AUTH_GITHUB_SECRET = "123"
-SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']           # make sureto get email
+# SOCIAL_AUTH_GITHUB_KEY = "123"
+# SOCIAL_AUTH_GITHUB_SECRET = "123"
+# SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']           # make sureto get email
 
 
 
