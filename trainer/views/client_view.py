@@ -75,12 +75,15 @@ def client_delete(request, pk):
     return render(request, "trainer/client/client_delete.html", {"client": client})
 
 
-def get_client_info(request, pk):
+# def get_client_info(request, pk):
+def get_client_info(request):
     trainer = get_object_or_404(UserTrainer, id=request.user.id)
-    client = Client.objects.get(id=pk, trainer=trainer)
+    client_id = request.GET.get('client')
+    client = Client.objects.get(id=client_id, trainer=trainer)
     client_info = {"id": client.id, "goals": client.goals, 'age': client.age, 'weight': client.weight, 'height': client.height}
 
     # id = client_info['id']
     # id = client_info.get('id')
 
-    return JsonResponse(client_info, safe=False)
+    # return JsonResponse(client_info, safe=False)    
+    return render(request, 'trainer/partials/_client_partial.html', {'client': client_info})

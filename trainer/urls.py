@@ -51,7 +51,8 @@ urlpatterns = [
     path("client/edit/<int:pk>/", login_required(client_view.client_edit), name="client_edit"),
     path("client/delete/<int:pk>/", login_required(client_view.client_delete), name="client_delete"),
 
-    path("client/info/<int:pk>/", client_view.get_client_info, name="get_client_info"),
+    # path("client/info/<int:pk>/", client_view.get_client_info, name="get_client_info"),
+    path("client/info/", client_view.get_client_info, name="get_client_info"),
 
     path("appointment/", login_required(appointment_view.appointment_list), name="appointment_list"),
     path("appointment/add/", login_required(appointment_view.appointment_add), name="appointment_add"),
@@ -66,7 +67,8 @@ urlpatterns = [
     path("workout/edit/<int:pk>/", login_required(workout_view.workout_edit), name="workout_edit"),
     path("workout/delete/<int:pk>/", login_required(workout_view.workout_delete), name="workout_delete"),
 
-    path("ai/generate/<str:prompt>", login_required(ai_view.ask), name="ai_generate"),
-    path("ai/generate2/<str:prompt>", login_required(ai_view.ask2), name="ai_generate"),
-    path("ai/generate3/<str:prompt>", login_required(ai_view.ask3), name="ai_generate")
+    path("ai/generate/<str:prompt>", ai_view.ask, name="ai_generate"),
+    path("ai/generate2/<str:prompt>", ai_view.ask2, name="ai_generate"),
+    path("ai/generate3/<str:prompt>", ai_view.ask3, name="ai_generate"),
+    path("ai/generate/workout/<int:client_id>/<int:no_of_exercises>", ai_view.generate_workout, name="ai_generate_workout")
 ]

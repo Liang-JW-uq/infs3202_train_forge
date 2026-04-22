@@ -100,22 +100,22 @@ DATABASES = {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
-    'default': {
-        'ENGINE'    : 'django.db.backends.mysql',
-        'NAME'      : 'defaultdb',
-        'USER'      : 'avnadmin',
-        'PASSWORD'  : 'AVNS_EDD9dfaVWJiv9uwcT7b',
-        'HOST'      : 'mysql-23d746ff-jitweiliang-uq-train-forge-db.f.aivencloud.com',
-        'PORT'      : '26456'
-    } 
     # 'default': {
     #     'ENGINE'    : 'django.db.backends.mysql',
-    #     'NAME'      : 'trainforge_db',
-    #     'USER'      : 'root',
-    #     'PASSWORD'  : 'Aeiou321',
-    #     'HOST'      : 'localhost',
-    #     'PORT'      : '3306'
+    #     'NAME'      : 'defaultdb',
+    #     'USER'      : 'avnadmin',
+    #     'PASSWORD'  : 'AVNS_EDD9dfaVWJiv9uwcT7b',
+    #     'HOST'      : 'mysql-23d746ff-jitweiliang-uq-train-forge-db.f.aivencloud.com',
+    #     'PORT'      : '26456'
     # } 
+    'default': {
+        'ENGINE'    : 'django.db.backends.mysql',
+        'NAME'      : 'trainforge_db',
+        'USER'      : 'root',
+        'PASSWORD'  : 'Aeiou321',
+        'HOST'      : 'localhost',
+        'PORT'      : '3306'
+    } 
     # 'default': {
     #     'ENGINE'    : 'django.db.backends.mysql',
     #     'NAME'      : 'db30',

@@ -1,8 +1,10 @@
-{% if form.errors or formset.errors or formset.non_form_errors %}
+
+
+{% if form.errors or formset.errors or form.non_field_errors or form.non_form_errors or formset.non_form_errors %}
     <div class="alert alert-danger py-2 small shadow-sm">
         
         {% if form.non_field_errors %}
-            {% for error in form.non_field_errors %}
+            {% for error in form.non_form_errors %}
                 <div class="text-center">{{ error }}</div>
             {% endfor %}
         {% endif %}
@@ -15,6 +17,12 @@
                         {{ field.label }}: {{ field.errors|striptags }}
                     {% endif %}
                 {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if form.non_form_errors %}
+            <div class="text-center border-top mt-1 pt-1">
+                <strong>Exercise List Error:</strong> {{ form.non_form_errors|striptags }}
             </div>
         {% endif %}
 

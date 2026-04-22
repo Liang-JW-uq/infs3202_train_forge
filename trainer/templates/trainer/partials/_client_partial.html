@@ -1,0 +1,24 @@
+<div>
+    <div class="row mb-3">
+        <div class="col-4">
+            Age
+            <input type="text" id="client-age" value="{{ client.age }}" class="form-control" disabled>
+        </div>
+        <div class="col-4">
+            Weight
+            <input type="text" id="client-weight" value="{{ client.weight }}" class="form-control" disabled>
+        </div>
+        <div class="col-4">
+            Height
+            <input type="text" id="client-height" value="{{ client.height }}" class="form-control" disabled>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-12">
+            <textarea id="client-goals" class="form-control bg-secondary" rows="3" readonly>
+                {{ client.goals }}
+            </textarea>
+        </div>
+    </div>
+</div>

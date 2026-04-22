@@ -1,0 +1,8 @@
+{% for tag in tags %}
+<input class="btn-check" type="checkbox" onchange="loadExercises()" 
+    name="tags_filter" value="{{tag.id}}" id="tag{{tag.id}}">
+
+<label class="btn btn-outline-primary rounded-pill px-3 py-1" for="tag{{tag.id}}">
+    {{tag.name}}
+</label>
+{% endfor %}

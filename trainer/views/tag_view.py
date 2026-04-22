@@ -105,10 +105,11 @@ def tag_delete(request, pk):
 def get_trainer_tags(request):
     trainer = get_object_or_404(UserTrainer, id=request.user.id)
     tags = Tag.objects.filter(trainer=trainer).order_by("id")
-    tag_list = []
-    for tag in tags:
-        tag_list.append({"id": tag.id, "name": tag.name})
+    # tag_list = []
+    # for tag in tags:
+    #     tag_list.append({"id": tag.id, "name": tag.name})
     # id = client_info['id']
     # id = client_info.get('id')
 
-    return JsonResponse(tag_list, safe=False)
+    # return JsonResponse(tag_list, safe=False)
+    return render(request, 'trainer/partials/_tag_partial.html', {'tags': tags})

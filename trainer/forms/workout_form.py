@@ -8,7 +8,12 @@ class WorkoutForm(forms.ModelForm):
         model = Workout
         fields = ['client', 'is_completed', 'trainer_review', 'client_remarks', 'ai_feedback']
         widgets = {
-            'client': forms.Select(attrs={'class': 'form-control'}),
+            'client': forms.Select(attrs={
+                'class': 'form-control',
+                'hx-get': '/client/info',
+                'hx-trigger': 'change',
+                'hx-target': '#client-info'
+            }),
             'trainer_review': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'client_remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
         }
@@ -37,10 +42,11 @@ class WorkoutExerciseForm(forms.ModelForm):
         fields = ['exercise', 'is_done', 'pre_sets', 'pre_reps', 'pre_weight', 'pre_duration',
                   'actual_sets', 'actual_reps', 'actual_weight', 'actual_duration']
         widgets = {
-            'pre_sets': forms.NumberInput(attrs={'class': 'form-control bg-secondary', 'readonly': True}),
-            'pre_reps': forms.NumberInput(attrs={'class': 'form-control bg-secondary', 'readonly': True}),
-            'pre_weight': forms.NumberInput(attrs={'class': 'form-control bg-secondary', 'readonly': True}),
-            'pre_duration': forms.NumberInput(attrs={'class': 'form-control bg-secondary', 'readonly': True}),
+            # 'exercise': forms.Select(attrs={'disabled': True}),
+            'pre_sets': forms.NumberInput(attrs={'class': 'form-control'}),
+            'pre_reps': forms.NumberInput(attrs={'class': 'form-control'}),
+            'pre_weight': forms.NumberInput(attrs={'class': 'form-control'}),
+            'pre_duration': forms.NumberInput(attrs={'class': 'form-control'}),
             'actual_sets': forms.NumberInput(attrs={'class': 'form-control'}),
             'actual_reps': forms.NumberInput(attrs={'class': 'form-control'}),
             'actual_weight': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -49,6 +55,20 @@ class WorkoutExerciseForm(forms.ModelForm):
         labels = {
             
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # all the prescribe exercise values are to be marked non editable
+        if self.instance and self.instance.pk:
+            readonly_fields = ['exercise', 'pre_sets', 'pre_reps', 'pre_weight', 'pre_duration']
+            
+            for field_name in readonly_fields:
+                if field_name in self.fields:
+                    self.fields[field_name].disabled = True
+                    self.fields[field_name].widget.attrs['readonly'] = True
+                    self.fields[field_name].required = False
+                    self.fields[field_name].widget.attrs['class'] = 'form-control'
 
 
 

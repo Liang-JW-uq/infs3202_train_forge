@@ -19,9 +19,14 @@
         <!-- 3. Application specific css -->
         <link href="{% static 'css/root.css' %}" rel="stylesheet">        
 
-        <!-- 4. Page-Specific styles -->
+        <!-- 6. HTMX -->
+        <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.10/dist/htmx.min.js" integrity="sha384-H5SrcfygHmAuTDZphMHqBJLc3FhssKjG7w/CeCpFReSfwBWDTKpkzPP8c+cLsK+V" crossorigin="anonymous"></script>
+
+        <!-- 5. Page-Specific styles -->
         {% block custom_styles %}
         {% endblock %}
+
+        
     </head>
 
     

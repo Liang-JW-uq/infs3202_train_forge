@@ -24,13 +24,16 @@
                     <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
                             <h5>Tags</h5>
-                            <div id="tags-container">
-                                
+                            <div id="tags-container"
+                                hx-get="/tag/info"
+                                hx-target="this"
+                                hx-trigger="load"
+                            >
+
                             </div>
                             <br/>
                             <h5>Exercises</h5>
                             <div id="exercises-container" style="overflow-y: scroll; height: 200px;">
-                                
                             </div>
                         </div>
                     </div>
@@ -68,28 +71,9 @@
                         {{ form.client }}
                     </div>
                     
-                    <div class="row mb-3">
-                        <div class="col-4">
-                            Age
-                            <input type="text" id="client-age" class="form-control" disabled>
-                        </div>
-                        <div class="col-4">
-                            Weight
-                            <input type="text" id="client-weight" class="form-control" disabled>
-                        </div>
-                        <div class="col-4">
-                            Height
-                            <input type="text" id="client-height" class="form-control" disabled>
-                        </div>
-                    </div>
 
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <textarea id="client-goals" class="form-control bg-secondary" rows="3" readonly>
-                        
-                            </textarea>
-                        </div>  
-                        
+                    <div id="client-info">
+
                     </div>
                 </div>
 
@@ -146,6 +130,10 @@
         <div id="empty-form-template" class="d-none">
             <div class="formset-row mb-3 p-2 bg-dark border border-secondary rounded overflow-hidden">
                 
+                <div id="testing" class="d-none">
+                    {{ formset.empty_form.DELETE }}
+                </div>
+
                 <div class="mb-2 w-100" disabled readonly>
                     {{ formset.empty_form.exercise }}
                 </div>
@@ -172,7 +160,8 @@
                 </div>
 
                 <div class="text-end mt-1">
-                    <button type="button" class="btn btn-sm text-danger remove-row p-0 border-0" style="font-size: 0.7rem;">
+                    <button type="button" class="btn btn-sm text-danger remove-row p-0 border-0" 
+                        onclick="delExercise(this)" style="font-size: 0.7rem;">
                         <i class="bi bi-trash"></i> Remove
                     </button>
                 </div>
@@ -196,62 +185,81 @@
         
         const totalForms = document.querySelector("input[name$='-TOTAL_FORMS']");
 
+        // These events happen when the page first loads, so this mainly will SET UP EVENTS, or LOAD DATA
         document.addEventListener("DOMContentLoaded", async () => {
-            await loadTrainerTags();
+            // We load all of the TAGS associated with the Trainer first at the Start, since they don't change throughout the page
+            // await loadTrainerTags();
 
-            clientSelectElement.addEventListener("change", async (e) => {
-            // alert(e.target.value)
-            await fetch(`/client/info/${e.target.value}`)
-                .then(res => res.json())
-                .then(data => {
-                    goalsElement.innerHTML = data.goals
-                    clientAgeElement.value = data.age
-                    clientWeightElement.value = data.weight
-                    clientHeightElement.value = data.height
-                })
-            });
+            // // Then, we add a Simple EventListener to the CLIENT DROPDOWN SELECT...
+            // // ... so that the Client details we be updated EVERY TIME we CHOOSE A DIFFERENT CLIENT
+            // clientSelectElement.addEventListener("change", async (e) => {
+            // // Here, we call the CUSTOM EXTRA View Function JUST to retrieve the specific data we need
+            // // The function is special because it DOES NOT return a page render...
+            // // ... it returns a JSON RESPONSE OBJECT that is ONLY USABLE by these Javascript Form Requests to update the pages
+            // await fetch(`/client/info/${e.target.value}`)
+            //     .then(res => res.json())
+            //     .then(data => {
+            //         goalsElement.innerHTML = data.goals
+            //         clientAgeElement.value = data.age
+            //         clientWeightElement.value = data.weight
+            //         clientHeightElement.value = data.height
+            //     })
+            // });
         });
 
-        async function loadTrainerTags() {
-            await fetch('/tag/info/')
-                .then(res => res.json())
-                .then(data => {
-                    tagsContainerElement.innerHTML = data.map(tag => `
-                        <input class="btn-check" type="checkbox" onchange="loadExercises()" 
-                            name="tags_filter" value="${tag.id}" id="tag${tag.id}">
+        // Same principle here, calling a SPECIFC EXTRA View Func that returns JSON RESPONSE to POPULATE
+        // async function loadTrainerTags() {
+            // await fetch('/tag/info/')
+            //     .then(res => res.json())
+            //     .then(data => {
+            //         // Here, for every single TAG detected, CREATE A NEW ELEMENT and *APPEND* IT
+            //         tagsContainerElement.innerHTML = data.map(tag => `
+            //             <input class="btn-check" type="checkbox" onchange="loadExercises()" 
+            //                 name="tags_filter" value="${tag.id}" id="tag${tag.id}">
                         
-                        <label class="btn btn-outline-primary rounded-pill px-3 py-1" for="tag${tag.id}">
-                            ${tag.name}
-                        </label>
-                    `).join('');
+            //             <label class="btn btn-outline-primary rounded-pill px-3 py-1" for="tag${tag.id}">
+            //                 ${tag.name}
+            //             </label>
+            //         `).join('');
 
-                    // data.forEach(function(item, index) {
-                    //     console.log(`Tag id: ${item.id} - ${item.name   }`)
-                    // }, );
-                })
-        }
+            //         // data.forEach(function(item, index) {
+            //         //     console.log(`Tag id: ${item.id} - ${item.name   }`)
+            //         // }, );
+            //     })
+        // }
 
+        // This function is found in line 226 - We attach it to EVERY SINGLE TAG ELEMENT CREATED
+        // So that each Tag btn can List out ALL *Exercises* that have it as (one of) their tags
         async function loadExercises() {
-            debugger;
 
-            // 1. Get all checkboxes with that name
+            // ALL Checkboxes SHARE NAME, so that we know they are part of the SAME COLLECTION
+                // NOTE: querySelectorAll basically means "query (search)" for ALL elements with the following "CSS Attr *Selector*"
             const allTags = document.querySelectorAll('input[name="tags_filter"]');
             const selectedIds = [];
+            // Brute force method; Go through ALL the Tag elements, check if they are selected (checked), and then directly PUSH them into an array
             for (let i = 0; i < allTags.length; i++) {
                 if (allTags[i].checked) {
                     selectedIds.push(allTags[i].value);
                 }
             }
- 
+            // If there >=1 Tags selected, then we list out ALL elements that have them (OR Relation, not And)
             if(selectedIds.length > 0) {
-                // 3. build string of tags to get  /exercises/tags/1,2,3/
+                // Build string of tags to get `/exercises/tags/1,2,3/` since that's how we configured the URL
                 const tagString = selectedIds.join(',');                
-                
+                // Again, call the extra View Func that RETURNS JSON RESPONSE objects specific to our current needs
                 try {
                     await fetch(`/exercises/tags/${tagString}`)
                         .then(res => res.json())
                         .then(data => {
                             if(data.length) {
+                                // Then for every Exercise element found, create a new element to select
+                                // NOTE:
+                                // -------
+                                // Over here, we are passing in the ENTIRE EXERCISE OBJECT into the **PARAMETER**
+                                // This will produce an EXTREMELY BLOATED HTML Raw Text (when inspected), but this is the most...
+                                // ... straightforward way to pass in the data
+                                // Bcs we'll be needing that extra data, down in addExercise(), but this is the MOST CONVENIENT / FEASIBLE...
+                                // ... time we can pass in data, without resorting to more code like HTMX, so this will do
                                 exercisesContainerElement.innerHTML = data.map(ex => `
                                     <li class="card mb-2 shadow-sm border-0 p-1" style="cursor: pointer;" 
                                         onclick='addExercise(${JSON.stringify(ex)})'>
@@ -263,23 +271,46 @@
                                 `).join('');
                             }
                         })
-                } 
+                }
+                // If we receive damaged/incomplete data, prepare a contingency element to be generated
                 catch (err) {
                     exercisesContainerElement.innerHTML = '<li class="text-danger small text-center py-3">Error.</li>';
                 }
             }
+            // If NO TAGS are currently being selected, just have a placeholder element ready
             else {
                 exercisesContainerElement.innerHTML = '<li class="text-muted small text-center py-3">Select tags</li>';
             }
         }
     
+        // This function is found in line 267; It is ITERATIVELY GENERATED, with each having its own DIFFERENT ARGUMENT
+        // This is for the Buttons that Add Exercises onto the Workout, the ones that will GENERATE THE BOXES ON THE MAIN FORM...
+        // ... which are Formset-Forms, to be submitted as ONE UNIT when the user creates the Workout
+        // (Remember! workout_view.py line 53) Formset = Collection of MULTIPLE COPIES of the *Same Form* that are MANAGED TOGETHER as One Unit
         function addExercise(ex) {
-            debugger;
-            const index = parseInt(totalForms.value);       // from the formset management hidden values
-            const newRow = emptyTemplateElement.cloneNode(true);   // true -copies the node and its entire subtree
 
+            // Here, we are Interacting w/ and REPLACING the **EMPTY FORMSETS**
+            // These will be generated AS WE CLICK THE EXERCISES
+            
+            // Step 1: Access the   ***formset.management_form ***   data
+            // Django uses TOTAL_FORMS to track how many forms exist on submission
+            const index = parseInt(totalForms.value);       // from the formset management hidden values
+            // Step 2: Clone the hidden "empty form" template
+            // cloneNode(true) = deep clone -> copies all child elements, inputs, attributes, etc.
+            // This gives us a fresh, unbound form row that still contains "__prefix__" placeholders
+            const newRow = emptyTemplateElement.cloneNode(true);   // true -copies the node and its entire subtree
+            // Step 3: Replace Django's "__prefix__" placeholder with the actual index
+            // Django formsets REQUIRE each field name/id to follow the following pattern:
+            // form-0-field, form-1-field, etc.
+            // "__prefix__" is a special placeholder used ONLY in *** the EMPTY FORM ***
+            // If we don't replace it, Django will NOT recognize or process the form on submit...
+            // ... so we REPLACE it w/ the Appropriate INDEX for identification
             newRow.innerHTML = newRow.innerHTML.replace(/__prefix__/g, index);
+            // Step 4: Automatically assign the selected exercise to this new form row
+            // We target the <select> field inside the cloned form and set its value
+            // ex.id must match one of the option values in the select field
             newRow.querySelector('select').value = ex.id;
+
             // get the newRow inputs and update with selected exercise default values
             newRow.querySelectorAll('input').forEach(input => {
                 if (input.name.includes('pre_sets')) input.value = ex.def_sets;
@@ -287,11 +318,34 @@
                 if (input.name.includes('pre_weight')) input.value = ex.def_weight;
                 if (input.name.includes('pre_duration')) input.value = ex.def_duration;
             });
+            // We remove the attribute that makes the elements hidden
             newRow.classList.remove('d-none');
 
             formsetContainerElement.appendChild(newRow);
             totalForms.value = index + 1;               // make sure to increase total after adding
+
+           
         }
+
+        // AI Assisted
+        function delExercise(btn) {
+            const row = btn.closest('.formset-row');
+            
+            // Find the hidden DELETE checkbox
+            const deleteCheckbox = row.querySelector('input[name$="-DELETE"]');
+            
+            if (deleteCheckbox) {
+                // Mark for Django to ignore
+                deleteCheckbox.checked = true;
+                // Hide from user
+                row.style.display = 'none';
+                // Optional: add a class to identify "dead" rows if needed
+                row.classList.add('marked-for-delete');
+            }
+        }
+
+
+
     </script>
 
 {% endblock %}

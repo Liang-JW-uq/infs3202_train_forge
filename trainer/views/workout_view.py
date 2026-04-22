@@ -40,23 +40,37 @@ def workout_list(request):
 
 def workout_add(request):
 
+    # Update the stepper
     request.session["module"] = 'workouts'
-
+    # Retrieve the currently logged-in trainer object
     trainer = get_object_or_404(UserTrainer, id=request.user.id)
+
+    # Check for the request method, if the page has just loaded or if it's submission time
     if request.method == "POST":
+
+        # Create BOTH the Form and Formset
+        ### !*REMINDER*!
+        # A Formset is a Collection of MULTIPLE COPIES of the *Same Form* that are MANAGED TOGETHER as One Unit
+        # We need this bcs Each Workout can have MULTIPLE EXERCISES RELATED TO IT
+        # ... and for Every different Exercise, we need ONE UNIQUE WorkoutExercise Junction Data Entry
         form = WorkoutForm(request.POST, userTrainer = trainer)
         formset = WorkoutExerciseFormSet(request.POST, prefix='exercises')
 
+        # Now we need to validate for BOTH Form + Formset before we continue
         if form.is_valid() and formset.is_valid():
             # Have to make sure there is at least one formset
             if len(formset.forms) > 0:
                 try:
+                    # Atomic means Either ALL SUCCEED, or ALL FAIL (Automatic Rollback if failure part-way)
                     with transaction.atomic():
+                        # We have to save BEFORE doing anything, bcs the purpose of this line is to GET AN OBJECT TO SAVE TO IN THE FIRST PLACE
                         workout = form.save(commit=False)
-                        workout.trainer = trainer       # assign current trainer
+                        # Once we have our object retrieved from the form data, NOW we have the base to save the currently logged-in trainer to
+                        workout.trainer = trainer   # assign current trainer
+                        # Now, we save properly once we have the trainer data
                         workout.save()
 
-                        # Pass in the workout header
+                        # Pass in the workout header as a property into the Formset (just accept the syntax)
                         formset.instance = workout
                         formset.save()
 
@@ -69,11 +83,13 @@ def workout_add(request):
             else:
                 form.add_error(None, "Must have at least one exercise")
 
-
+        # This will hit if request==POST, BUT if the form isn't valid, or if there are errors found inside;
+        # This will kick us back to the add page, but with the extra errors attached
         return render(request, 'trainer/workouts/workout_add.html', {
             'form': form,
             'formset': formset
         })
+    
     else:
         form = WorkoutForm(userTrainer=trainer)
         formset = WorkoutExerciseFormSet()
@@ -84,10 +100,11 @@ def workout_add(request):
 def workout_edit(request, pk):
     # Saas tenant - get logged in trainer for data filtering
     trainer = get_object_or_404(UserTrainer, pk = request.user.id)
-
+    # Since this is EDIT, we also retrieve the targeted Workout object
     workout = get_object_or_404(Workout, pk=pk, trainer = trainer)
 
     if request.method == "POST":
+        # Instantiate both forms
         form = WorkoutForm(request.POST, instance=workout, userTrainer=trainer)
         formset = WorkoutExerciseFormSet(request.POST, instance=workout)
 
