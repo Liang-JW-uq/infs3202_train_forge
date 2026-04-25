@@ -10,11 +10,6 @@ from ..forms import AccountForm
 
 UserTrainer = get_user_model()
 
-def social_login(request):
-    user = request.user
-    if user.is_authenticated:
-        return redirect('home')
-
 def login_page(request):
     form = AccountForm(request.POST or None)
 
@@ -36,7 +31,7 @@ def login_page(request):
         else:
             form.add_error(None, "Please enter both credentials.")
             
-    return render(request, 'registration/login.html', {'form': form})
+    return render(request, 'registration/login.html', {'layout': 'public', 'form': form})
 
 
 def register_page(request):
@@ -81,7 +76,7 @@ def register_page(request):
         form = AccountForm()
 
 
-    return render(request, 'registration/register.html', {'form': form})
+    return render(request, 'registration/register.html', {'layout': 'public', 'form': form})
 
 
 # THIS IS SO STUPID, FORM_ISVALID WILL RUN THE FORM VALIDATION AGAINST THE DATABAE #

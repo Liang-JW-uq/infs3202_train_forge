@@ -17,7 +17,6 @@ urlpatterns = [
     #####
     # social-auth-django provides the 'social:begin' namespace
     path('social-auth/', include('social_django.urls', namespace='social')),
-    path("social-login/", account_view.social_login, name="social_login"),
 
     # For Django Login + Register Authentication
     # path('', RedirectView.as_view(url=reverse_lazy('admin:index'))),

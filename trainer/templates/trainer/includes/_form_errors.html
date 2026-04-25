@@ -1,15 +1,19 @@
 
 
-{% if form.errors or formset.errors or form.non_field_errors or form.non_form_errors or formset.non_form_errors %}
+{% if form.non_field_errors or form.field_errors or form.non_form_errors or formset.errors or formset.non_form_errors %}
+
     <div class="alert alert-danger py-2 small shadow-sm">
         
         {% if form.non_field_errors %}
-            {% for error in form.non_form_errors %}
+            {% for error in form.non_field_errors %}
                 <div class="text-center">{{ error }}</div>
             {% endfor %}
         {% endif %}
 
-        {% if form.errors and not form.non_field_errors %}
+        {% comment %}
+        <!-- {% if form.errors and not form.non_field_errors %} -->
+        {% endcomment %}
+        {% if form.field_errors %}
             <div class="text-center">
                 <strong>Main Form:</strong>
                 {% for field in form %}
@@ -33,4 +37,5 @@
         {% endif %}
 
     </div>
+
 {% endif %}

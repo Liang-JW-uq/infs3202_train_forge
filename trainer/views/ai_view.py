@@ -9,6 +9,8 @@ from django.forms.models import model_to_dict
 from pydantic import BaseModel, Field
 from typing import List, Optional
 
+from django.conf import settings
+
 
 # Have to ensure result return from llm matches to workoutexercise model
 # in order for easy insertion into inline formset rows
@@ -34,7 +36,7 @@ class StructuredOutput(BaseModel):
 def ask(request, prompt):
     llm = ChatGoogleGenerativeAI(
         model='gemini-2.5-flash-lite',
-        google_api_key='AIzaSyC0w0i5lk99Ind_jHkPT7aCXYy8xAkoTlo',
+        google_api_key = settings.GEMINI_API_KEY,
         temperature=0.3
     )
 
@@ -54,7 +56,7 @@ def ask2(request, prompt):
 
     llm = ChatGoogleGenerativeAI(
         model='gemini-2.5-flash-lite',
-        google_api_key='AIzaSyC0w0i5lk99Ind_jHkPT7aCXYy8xAkoTlo',
+        google_api_key=settings.GEMINI_API_KEY,
         temperature=0.5,
         max_tokens=150
     )
@@ -79,13 +81,26 @@ def ask2(request, prompt):
         "output_tokens": usage.get("output_tokens")
     }, safe=False)
 
+from langchain_openai import ChatOpenAI
+
 def ask3(request, prompt):
 
-    llm = ChatGoogleGenerativeAI(
-        model='gemini-2.5-flash-lite',
-        google_api_key='AIzaSyC0w0i5lk99Ind_jHkPT7aCXYy8xAkoTlo',
+    llm1 = ChatOpenAI(
+        model="nvidia/nemotron-3-super-120b-a12b:free",
+        api_key=settings.OPENROUTER_API_KEY,
+        base_url="https://openrouter.ai/api/v1",
+        model_kwargs={"tool_choice": "auto"} 
+    )
+
+    llm2 = ChatGoogleGenerativeAI(
+        model='gemini-1.5-flash',
+        google_api_key=settings.GEMINI_API_KEY,
         temperature=0.5,
         max_tokens=150
+    )
+
+    llm3 = ChatOpenAI(
+        api_key=settings.UNI_CHATGPT_KEY,
     )
 
     prompt_template = ChatPromptTemplate.from_messages([
@@ -97,7 +112,7 @@ def ask3(request, prompt):
         """)
     ])
     
-    structured_llm = llm.with_structured_output(StructuredOutput, include_raw=True)
+    structured_llm = llm1.with_structured_output(StructuredOutput, include_raw=True)
     chain = prompt_template | structured_llm
     response = chain.invoke({'question': prompt})
     answer = response.get('parsed')
@@ -124,16 +139,23 @@ def ask3(request, prompt):
 def generate_workout(request, client_id, no_of_exercises):
     trainer = UserTrainer.objects.get(id=request.user.id)
 
-    # Primary model is for Google Gemini
-    llm = ChatGoogleGenerativeAI(
-        model='gemini-2.5-flash-lite',
-        google_api_key='AIzaSyC0w0i5lk99Ind_jHkPT7aCXYy8xAkoTlo',
+    # Primary model is for NVidia NIM
+    llm = ChatOpenAI(
+        model="nvidia/nemotron-3-super-120b-a12b:free",
+        api_key = settings.OPENROUTER_API_KEY,
+        base_url="https://openrouter.ai/api/v1",
+        model_kwargs={"tool_choice": "auto"} 
     )
     # # Backup model
-    # llm2 = ChatOpenAI(
-    #     model='nvidia/nemotron-3-super-120b-a12b:free',
-    #     api_key='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',
-    #     base_url='https://openrouter.ai/api/v1'
+    # llm2 = ChatGoogleGenerativeAI(
+    #     model='gemini-2.5-flash-lite',
+    #     google_api_key=settings.GEMINI_API_KEY,
+    #     temperature=0.5,
+    #     max_tokens=150
+    # )
+    # # School Provided Option
+    # llm3 = ChatOpenAI(
+    #     api_key=settings.UNI_CHATGPT_KEY, 
     # )
 
     trainer_prompt = get_prompt()

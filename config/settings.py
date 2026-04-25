@@ -24,6 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-kdu+gvenhn8d3ayyg2g@vaxcmil@4grxy6cv%2rewq)@4)t+_e'
 
+from .info import G_API_KEY, OR_API_KEY, U_GPT_KEY
+GEMINI_API_KEY = G_API_KEY
+OPENROUTER_API_KEY = OR_API_KEY
+UNI_CHATGPT_KEY = U_GPT_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -95,35 +99,16 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+from .info import DB_ENGINE, DB_NAME, DB_USER, DB_PWD, DB_HOST, DB_PORT
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
-    # 'default': {
-    #     'ENGINE'    : 'django.db.backends.mysql',
-    #     'NAME'      : 'defaultdb',
-    #     'USER'      : 'avnadmin',
-    #     'PASSWORD'  : 'AVNS_EDD9dfaVWJiv9uwcT7b',
-    #     'HOST'      : 'mysql-23d746ff-jitweiliang-uq-train-forge-db.f.aivencloud.com',
-    #     'PORT'      : '26456'
-    # } 
     'default': {
-        'ENGINE'    : 'django.db.backends.mysql',
-        'NAME'      : 'trainforge_db',
-        'USER'      : 'root',
-        'PASSWORD'  : 'Aeiou321',
-        'HOST'      : 'localhost',
-        'PORT'      : '3306'
-    } 
-    # 'default': {
-    #     'ENGINE'    : 'django.db.backends.mysql',
-    #     'NAME'      : 'db30',
-    #     'USER'      : 'root',
-    #     'PASSWORD'  : 'returntoRL!',
-    #     'HOST'      : '103.3.173.137',
-    #     'PORT'      : '3306'
-    # } 
+        'ENGINE'    : DB_ENGINE,
+        'NAME'      : DB_NAME,
+        'USER'      : DB_USER,
+        'PASSWORD'  : DB_PWD,
+        'HOST'      : DB_HOST,
+        'PORT'      : DB_PORT
+    }
 }
 
 # Password validation
@@ -136,8 +121,8 @@ DATABASES = {
 
 # using path names
 LOGIN_URL = 'login' # These go by the ****name**** in urls.py, NOT the URL String/Param
-LOGIN_REDIRECT_URL = 'social_login'         ## this is to facilitate the post social login checking
-                                            ## normal django auth will be redirected from the view
+
+LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'index'
 
 # customized User with is_trainer indicator
@@ -165,13 +150,14 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',  # Keep for username/password login
 )
 
+from .info import S_AUTH_GOOGLE_K, S_AUTH_GOOGLE_S
 # Google OAuth2
-# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "340196783603-d25rdkbln10vbrotrtdunq751sl1dpij.apps.googleusercontent.com"
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-#     'https://www.googleapis.com/auth/userinfo.email',
-#     'https://www.googleapis.com/auth/userinfo.profile',
-# ]
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = S_AUTH_GOOGLE_K
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = S_AUTH_GOOGLE_S
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+]
 
 # Github OAuth2
 # SOCIAL_AUTH_GITHUB_KEY = "123"
