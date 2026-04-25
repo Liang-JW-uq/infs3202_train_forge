@@ -128,9 +128,11 @@
             <!-- End of form-containing div -->
 
             <!-- Button Section -->
-            <div class="row mb-3">
-                <button type="submit">Save</button>
-                <a href="{% url 'exercise_list' %} " class="btn btn-danger">Cancel</a>
+            <div class="mt-4 d-flex gap-2 justify-content-end">
+                <a href="{% url 'exercise_list' %}" class="btn btn-outline-secondary w-50">
+                    Cancel
+                </a>
+                <button type="submit" class="btn btn-primary w-50">Save</button>
             </div>
             
         </form>

@@ -17,7 +17,7 @@ class TagForm(forms.ModelForm):
         labels = {
             'name': 'Tag Name'
         }
-        widget = {
+        widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'})
         }
         validation = {

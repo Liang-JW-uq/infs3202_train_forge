@@ -1,3 +1,22 @@
-Django>=6
+# Framework & Server
+Django==6.0.3
 gunicorn
-mysqlclient
+
+# Database
+mysqlclient==2.2.8
+
+# Authentication & Social Login
+social-auth-app-django==5.7.0
+
+# AI & LangChain (Loosened to allow pip to resolve)
+langchain
+langchain-core
+langchain-google-genai
+google-genai==1.72.0
+
+pydantic==2.12.5
+pydantic-settings==2.13.1
+pydantic_core==2.41.5
+
+# Environment & Utilities
+PyYAML==6.0.3

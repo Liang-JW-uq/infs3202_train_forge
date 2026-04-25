@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-kdu+gvenhn8d3ayyg2g@vaxcmil@4grxy6cv%2rewq)@4)t+_e'
 
-from .info import G_API_KEY, OR_API_KEY, U_GPT_KEY
+from config.info import G_API_KEY, OR_API_KEY, U_GPT_KEY
 GEMINI_API_KEY = G_API_KEY
 OPENROUTER_API_KEY = OR_API_KEY
 UNI_CHATGPT_KEY = U_GPT_KEY
@@ -99,7 +99,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-from .info import DB_ENGINE, DB_NAME, DB_USER, DB_PWD, DB_HOST, DB_PORT
+from config.info import DB_ENGINE, DB_NAME, DB_USER, DB_PWD, DB_HOST, DB_PORT
 DATABASES = {
     'default': {
         'ENGINE'    : DB_ENGINE,
@@ -150,7 +150,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',  # Keep for username/password login
 )
 
-from .info import S_AUTH_GOOGLE_K, S_AUTH_GOOGLE_S
+from config.info import S_AUTH_GOOGLE_K, S_AUTH_GOOGLE_S
 # Google OAuth2
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = S_AUTH_GOOGLE_K
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = S_AUTH_GOOGLE_S
@@ -160,9 +160,9 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 ]
 
 # Github OAuth2
-# SOCIAL_AUTH_GITHUB_KEY = "123"
-# SOCIAL_AUTH_GITHUB_SECRET = "123"
-# SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']           # make sureto get email
+SOCIAL_AUTH_GITHUB_KEY = "Ov23li46awk1gCKzgjoZ"
+SOCIAL_AUTH_GITHUB_SECRET = "3e6f837438187d496e3855081b33e4f1279fc63e"
+SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']           # make sureto get email
 
 
 

@@ -69,3 +69,125 @@ CMD: git checkout main
     --- switch to the target merge branch first
 CMD: git merge <<branch-to-merge-from>>
     --- then specify the branch to merge from
+
+
+APP ENGINE
+=========================================================================================================
+0. REferences
+	--- https://bennett39.medium.com/deploying-a-django-application-to-google-app-engine-f9c91a30bd35
+	--- https://python.plainenglish.io/optimizing-django-for-google-cloud-platform-gcp-a-guide-to-cloud-deployment-62dc4e8ea8da
+	--- https://arindam-das.medium.com/getting-started-with-google-app-engine-a-complete-guide-with-hands-on-examples-4be1f231510e
+	--- https://codelabs.developers.google.com/codelabs/cloud-app-engine-python3#0
+
+1. Create / Select Project
+2. Search App Engine from GCP Console search bar
+3. Create Application
+	--- select region: asia-southeast1 (should be the same region as the VM)
+	--- Indentity and API access
+	--- NEXT
+ 	Resources - Python
+	Environment - Standard
+4. Permissions
+	--- we have to enable some permission to store codes and also for build scripts on the app engine
+	--- GO to IAM admin
+		--- select the project / service account (ersonal-trainer-5b731@appspot.gserviceaccount.com)
+		--- select  edit and from the right pane
+			--- add another role
+			1. Storage Admin
+			2. Cloud Build Services
+
+	Download Google Cloud SDK if have not done so
+4. Configuring from Cloud CLI (local using PowerShell)
+	*** RMB TO SWITCH TO YOUR DJANGO PROJECT ROOT FOLDER ****
+	*** OR USE VSCODE TERMINAL *****
+	--- CMD: gcloud auth list		(check current login)
+	--- CMD: gcloud config list		(check current selected project)
+		--- CMD: gcloud project list				(list all projects in your account)
+		--- CMD: gcloud config set project <<project-id>>	(to change to another project)
+
+	--- CMD: gcloud config get-value project (just to reconfimr we are on the right project)
+4  Add requirements.txt
+	--- Django>=6
+	--- gunicorn
+	--- mysqlclient
+
+4  Static files
+	--- CMD: py manage.py collectstatic
+		--- this will create a staticfiles folder (and copy static/ files over)
+4 Settings.py
+	a. 	DEBUG = False
+		ALLOWED_HOSTS = ['*']	# For school project, this is fine
+
+	b. 	STATIC_URL = '/static/'
+		STATICFILES_DIRS = [
+    			os.path.join(BASE_DIR, 'static'),
+		]
+		STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+	c. 
+  
+5. Configuring django project
+	--- from project root 
+	--- create app.yaml
+		--- 	runtime: python312  # Match your local version if possible
+			env: standard
+			instance_class: F1
+
+			# config here is referring to the django project config folder (or maybe the same name as the project)
+			entrypoint: gunicorn -b :$PORT config.wsgi
+
+			env_variables:
+  			  # IMPORTANT: Update this IP every time you restart your VM!, THIS IS FOR DEPLOYED APP, NOT WHEN DEBUGGING WHICH IS REFERRING SETTINGS.PY
+  	  <<two spaces>>  DB_HOST: "34.x.x.x" 
+  	  <<two spaces>>  DB_NAME: "uni_db"
+  	  <<two spaces>>  DB_USER: "pt_user"
+  	  <<two spaces>>  DB_PASS: "123123123"
+
+env_variables:
+  DB_HOST: "34.142.192.182"
+  DB_NAME: "uni_db"
+  DB_USER: "pt_user"
+  DB_PASS: "123123123"
+	
+	--- create .gcloudignore
+	
+	--- create .gitignore (optional)
+
+6. app.yaml
+	--- 	runtime: python312
+		env: standard
+		instance_class: F1
+
+		entrypoint: gunicorn -b :$PORT config.wsgi
+
+		handlers:
+  		  - url: /static
+    		    static_dir: staticfiles
+
+	  	  - url: /.*
+    		    script: auto
+
+
+
+				
+CHECK APP ENGINCE
+------------------
+CMD: gcloud app describe
+
+
+- CMD: gcloud app deploy	OR gcloud app deploy --promote --stop-previoius-version
+---------------------------
+Services to deploy:
+descriptor:                  [C:\Development\uq\semester 3\infs3202\project\simulation\book_project_intermediate\app.yaml]
+source:                      [C:\Development\uq\semester 3\infs3202\project\simulation\book_project_intermediate]
+target project:              [personal-trainer-5b731]
+target service:              [default]
+target version:              [20260313t085951]
+target url:                  [https://personal-trainer-5b731.as.r.appspot.com]
+target service account:      [personal-trainer-5b731@appspot.gserviceaccount.com]
+
+	
+For debugging / logs for App Engine
+-----------------------------------
+--- CMD: gcloud app logs read
+--- CMD: gcloud app logs tail
+--- CMD: gcloud app instances list
