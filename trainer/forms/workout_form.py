@@ -15,7 +15,8 @@ class WorkoutForm(forms.ModelForm):
                 'hx-target': '#client-info'
             }),
             'trainer_review': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'client_remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
+            'client_remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'ai_feedback': forms.Textarea(attrs={'class': 'form-control', 'rows': 1, 'style': 'display: none'}),
         }
         labels = {
             'client': 'Select a client:'

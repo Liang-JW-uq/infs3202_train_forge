@@ -67,8 +67,8 @@
                                     <button type="button" id="ai-generate-exercises" onclick="generateExercise()" class="btn btn-secondary">Generate</button>
                                 </div>
                             </div>
-                            <div class="progress" id="progress-bar" style="visibility: hidden;">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                            <div class="progress" id="progress-bar" style="display: none;">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                             </div>
 
                             <hr/>
@@ -150,6 +150,8 @@
                         </div>
                     </div>
                 </div>
+
+                {{form.ai_feedback}}
             </form>
         </div>
 
@@ -212,7 +214,7 @@
         var exerciseNumberGenerateSelect = document.getElementById("no-exercises")
         var progressBarElement = document.getElementById("progress-bar")
         var aiSuggestionsElement = document.getElementById("ai-suggestions")
-        
+        var hiddenAiSuggestionElement = document.getElementById("id_ai_feedback")
         
         const totalForms = document.querySelector("input[name$='-TOTAL_FORMS']");
 
@@ -382,7 +384,7 @@
             client_id = clientSelectElement.value
             
             try {
-                progressBarElement.style.visibility = "visible"
+                progressBarElement.style.display = "";
                 await fetch(`/ai/generate/workout/${client_id}/${exercise_no}`)
                     .then(res => {
                         return res.json()
@@ -391,6 +393,7 @@
                         debugger
                         if (data) {
                             aiSuggestionsElement.innerHTML = data.answer.ai_explanation;
+                            hiddenAiSuggestionElement.innerHTML = data.answer.ai_explanation;
                         }
                         if (data.answer.exercises.length > 0) {
                             data.answer.exercises.forEach(exercise => {
@@ -402,7 +405,7 @@
                 debugger
                 alert(`Error! ${ex}`)
             } finally {
-                progressBarElement.style.visibility = "hidden"
+                progressBarElement.style.display = "none"
             }
         }
 
