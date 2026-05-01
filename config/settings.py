@@ -175,16 +175,30 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
     'prompt': 'select_account'
 }
 
+# Force django-social-auth to treat Username to be SAME as Email
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
+
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.auth_allowed',
     'social_core.pipeline.social_auth.social_user',
-    'social_core.pipeline.social_auth.associate_by_email',  # Finds your record
-    'social_core.pipeline.social_auth.associate_user',      # <--- THE MISSING LINK
+    'social_core.pipeline.social_auth.associate_by_email',  # Forces social-auth to use Email to validate instead of Username
+    
+    # 1. Get/Create the user first; If after successful social login, this will CREATE the UserTrainer Object   
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    
+    # 2. Now associate that user with the social account
+    'social_core.pipeline.social_auth.associate_user',      # <--- THE MISSING LINK; Social-auth uses this to match
+                                                            # against email from social account to auth-users (UserTrainers)
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
+
+    # 3. Finally, run your custom logic
+    'trainer.views.account_view.register_social_user',  # custom function to overide social auto register
 )
+
 
 
 # Internationalization

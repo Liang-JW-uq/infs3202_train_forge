@@ -193,3 +193,10 @@ Project Structure
 ---
 
 If you want next step: I can help you add an **“undo delete” button** or integrate this cleanly with HTMX so rows can be server-rendered instead of cloned.
+
+
+Social Login
+=============================================================================================
+REFERENCES:
+    --- https://python-social-auth.readthedocs.io/en/latest/configuration/django.html
+    --- https://medium.com/@kennethjiang/python-social-auth-for-django-tutorial-16bbe792659f

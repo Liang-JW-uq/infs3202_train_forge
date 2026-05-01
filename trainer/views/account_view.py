@@ -79,6 +79,25 @@ def register_page(request):
     return render(request, 'registration/register.html', {'layout': 'public', 'form': form})
 
 
+# This is to be used by SOCIAL AUTH for DJANGO;
+# Parameters are fixed & defined, not for us to decide
+def register_social_user(backend, user, response, *args, **kwargs):
+    # At this point, the Social-Auth has Already Successfully CREATED A USERTRAINER OBJECT (We defined a custom User Object
+    # to override the default Django User Object in settings.py, line 129)
+
+    if user:    # Make sure there is a user returned to us
+        if not user.is_trainer: # user_trainer model, line 17
+            user.is_trainer = True  # FORCE it to be a Trainer
+            user.save()
+
+        # Check if the user is in the "Free" tier or not (just in case)
+        if not user.groups.filter(name='Free').exists():
+            free_trainer = Group.objects.get(name="Free") #Case-sensitive
+            user.groups.add(free_trainer)
+        
+    return {"user": user}
+
+
 # THIS IS SO STUPID, FORM_ISVALID WILL RUN THE FORM VALIDATION AGAINST THE DATABAE #
 #
 # def login_page(request):
