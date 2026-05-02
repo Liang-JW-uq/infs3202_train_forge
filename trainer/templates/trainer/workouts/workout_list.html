@@ -1,9 +1,5 @@
 {% extends 'trainer/base.html' %}
 
-{% block custom_styles %}
-    {% load static %}
-    <link href="{% static 'css/tag.css' %}" rel="stylesheet">
-{% endblock %}
 
 
 {% block content %}
@@ -34,8 +30,8 @@
                 <tr>
                     <th class="text-nowrap">Client</th>
                     <th class="text-nowrap">Completed</th>
-                    <th class="text-nowrap">Exercise Count</th>
-                    <th class="text-nowrap">Exercises Completed</th>
+                    <th class="text-center d-none d-sm-table-cell">Exercise Count</th>
+                    <th class="text-center d-none d-sm-table-cell">Exercises Completed</th>
                     <th class="text-end text-nowrap px-3">actions</th>
                 </tr>
             </thead>
@@ -44,8 +40,8 @@
                 <tr>
                     <td class="text-break">{{ workout.client.name }}</td>
                     <td>{{ workout.is_completed }}</td>
-                    <td>{{ workout.exercise_count }}</td>
-                    <td>{{ workout.exercises_done }}</td>
+                    <td class="text-center d-none d-sm-table-cell">{{ workout.exercise_count }}</td>
+                    <td class="text-center d-none d-sm-table-cell">{{ workout.exercises_done }}</td>
                     <td class="text-end">
                         <div class="btn-group flex-column flex-sm-row">
                             <a href="{% url 'workout_edit' workout.id %}" class="btn btn-sm btn-outline-primary mb-1 mb-sm-0">Edit</a>

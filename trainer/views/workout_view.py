@@ -6,16 +6,13 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import ValidationError
 from django.contrib import messages
 from ..forms import WorkoutForm, WorkoutExerciseForm, WorkoutExerciseFormSet
+from django.http import JsonResponse
 
 def workout_list(request):
     request.session["module"] = 'workouts'
 
     trainer = get_object_or_404(UserTrainer, id=request.user.id)
-    workouts = Workout.objects.filter(trainer=trainer)
-    workouts = workouts.annotate(
-        exercise_count = Count('exercises'),
-        exercises_done = Count('exercises', filter=Q(exercises__is_done=True)),
-    )
+    
     
     search = request.GET.get('search', '')
     # We MUST order by something, otherwise will screw up paginator ordering when swapping pages
@@ -24,6 +21,11 @@ def workout_list(request):
         workouts = Workout.objects.filter(trainer=trainer, client__name__icontains=search).order_by('client__name').select_related("client")
     else:     
         workouts = Workout.objects.filter(trainer=trainer).order_by('client__name')
+
+    workouts = workouts.annotate(
+        exercise_count = Count('exercises'),
+        exercises_done = Count('exercises', filter=Q(exercises__is_done=True))
+    )
 
     # page controls - paginators with model data - 4 rows per page
     paginator = Paginator(workouts, 6)
@@ -146,3 +148,14 @@ def workout_delete(request, pk):
 
     return render(request, 'trainer/workouts/workout_delete.html', {'workout': workout})
 
+def get_pending_workouts(request):
+    trainer = get_object_or_404(UserTrainer, id=request.user.id)
+    filtered_workouts = Workout.objects.filter(trainer=trainer, is_completed=False)
+
+    pending_workouts = filtered_workouts.annotate(
+            exe_count=Count('exercises', distinct=True),
+            exe_done=Count(id, filter=Q(exercises__is_done = True), distinct=True),
+        )
+
+    return render(request, 'trainer/partials/_pending_workouts_partial.html', {'pending_workouts': pending_workouts})
+    # return JsonResponse(list(pending_workouts), safe=False)    

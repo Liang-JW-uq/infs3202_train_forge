@@ -1,0 +1,25 @@
+<h5 class="card-header text-success text-center">Pending Workouts ({{pending_workouts|length}})</h5>
+
+<ol class="list-group list-group-numbered">
+
+    {% for workout in pending_workouts %}
+
+    <a href="{% url 'workout_edit' workout.id %}" style="text-decoration: none;">
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+            {{ forloop.counter }}.
+            <div class="ms-2 me-auto">
+            <div class="fw-bold">{{workout.client.name}}</div>
+            {{workout.client.email}}
+            </div>
+            <span class="badge bg-secondary rounded-pill fs-5">{{workout.exe_done}}</span>
+            &nbsp; / &nbsp;
+            <span class="badge bg-success rounded-pill fs-5">{{workout.exe_count}}</span>
+        </li>
+    </a>
+
+    
+
+
+    {% endfor %}
+    
+</ol>

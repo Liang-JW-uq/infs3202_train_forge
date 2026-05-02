@@ -21,7 +21,7 @@
             </div>
         </form>
 
-        <a href="{% url 'client_add' %}" class="btn btn-primary">+ Add Clients</a>
+        <a href="{% url 'client_add' %}" class="btn px-4" style="background-color: #F971B0;">+ Add Clients</a>
     </div>
 
     <div class="table-responsive">
@@ -36,8 +36,8 @@
             <tbody>
                 {% for client in clients %}
                 <tr>
-                    <td class="fw-bold">{{ client.name }}</td>
-                    <td class="fw-bold">{{ client.email }}</td>
+                    <td>{{ client.name }}</td>
+                    <td>{{ client.email }}</td>
                     <td class="text-end">
                         <div class="btn-group flex-column flex-sm-row">
                             <a href="{% url 'client_edit' client.id %}" class="btn btn-sm btn-outline-primary mb-1 mb-sm-0">Edit</a>

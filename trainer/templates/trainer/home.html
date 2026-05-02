@@ -22,18 +22,18 @@
                         <!-- RIGHT: Vertical stack -->
                         <div class="col-6">
                             <div class="d-flex justify-content-between">
-                                <span class="text-body-secondary">Active</span>
-                                <span class="fw-bold text-success">3</span>
+                                <span class="text-body-secondary">Workouts >=5</span>
+                                <span class="fw-bold text-success">{{summary.client_workouts.high}}</span>
                             </div>
 
                             <div class="d-flex justify-content-between">
-                                <span class="text-body-secondary">Registered</span>
-                                <span class="fw-bold text-info">5</span>
+                                <span class="text-body-secondary">Workouts >=1</span>
+                                <span class="fw-bold text-info">{{summary.client_workouts.medium}}</span>
                             </div>
 
                             <div class="d-flex justify-content-between">
-                                <span class="text-body-secondary">Retired</span>
-                                <span class="fw-bold text-secondary">4</span>
+                                <span class="text-body-secondary">Workouts 0</span>
+                                <span class="fw-bold text-secondary">{{summary.client_workouts.low}}</span>
                             </div>
                         </div>
 
@@ -78,12 +78,12 @@
                         <div class="col-6  border-end">
                             <div class="d-flex justify-content-between">
                                 <span class="text-body-secondary">Not Started</span>
-                                <span class="fw-bold text-success">x</span>
+                                <span class="fw-bold text-success">{{summary.workouts.not_started}}</span>
                             </div>
 
                             <div class="d-flex justify-content-between">
                                 <span class="text-body-secondary">In Progress</span>
-                                <span class="fw-bold text-info">{{summary.workouts.pending}}</span>
+                                <span class="fw-bold text-info">{{summary.workouts.in_progress}}</span>
                             </div>
 
                             <div class="d-flex justify-content-between">
@@ -108,16 +108,27 @@
     <div class="row row-cols-1 row-cols-md-2 g-4">
         <div class="col">
             <div class="card h-100 bg-dark shadow-sm">
+                <h5 class="card-header text-success text-center">Upcoming Appointments</h5>
                 <div class="card-body">
-                    <h5 class="card-title text-success">Upcoming Appointments</h5>
-            <div class="card h-100 bg-dark shadow-sm">
-                <div class="card-body" id="calendar">
-                </div>
-            </div>
+                    <div id="calendar"></div>
                 </div>
             </div>
         </div>
+
         <div class="col">
+
+            <div class="card h-100 bg-dark shadow-sm">
+                
+                <div class="card-body">
+
+                    <div id="pending-workouts-display" hx-get="{% url 'get_pending_workouts' %}" hx-trigger="load" hx-target="this">
+                    </div>
+
+                </div>
+            </div>
+
+
+            
         </div>
     </div>
 </div>

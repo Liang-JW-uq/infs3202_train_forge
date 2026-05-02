@@ -1,10 +1,5 @@
 {% extends 'trainer/base.html' %}
 
-{% block custom_styles %}
-    {% load static %}
-    <link href="{% static 'css/tag.css' %}" rel="stylesheet">
-{% endblock %}
-
 
 {% block content %}
     <div class="row mb-3">
@@ -24,7 +19,7 @@
             </div>
         </form>
 
-        <a href="{% url 'tag_add' %}" class="btn px-4" style="background-color: #F971B0">+ Add Tag</a>
+        <a href="{% url 'tag_add' %}" class="btn px-4" style="background-color: #3ABEF9">+ Add Tag</a>
     </div>
 
     <!-- tags list -->

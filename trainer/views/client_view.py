@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from django.db.models import Count
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
 from orm.models import Client, UserTrainer
 from ..forms import ClientForm
@@ -13,10 +15,31 @@ def client_list(request):
     request.session["module"] = 'clients'
 
     userTrainer = get_object_or_404(UserTrainer, pk=request.user.id)
-    # clients = Client.objects.filter(trainer__id=logged_in_trainer)
-    clients = Client.objects.filter(trainer=userTrainer)
-    
-    return render(request, "trainer/client/client_list.html", {"clients": clients})
+
+    search = request.GET.get('search', '')
+    # We MUST order by something, otherwise will screw up paginator ordering when swapping pages
+    if search:
+        # icontains to ignore char case
+        clients = Client.objects.filter(trainer=userTrainer, name__icontains=search).order_by('name')
+    else:     
+        clients = Client.objects.filter(trainer=userTrainer).order_by('name')
+
+    # tags = Tag.objects.filter(trainer=userTrainer)
+    clients =  clients.annotate(workout_count = Count('workouts'))
+
+
+    # page controls - paginators with model data - 4 rows per page
+    paginator = Paginator(clients, 6)
+    page_number = request.GET.get('page')
+    try:
+        pager = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        pager = paginator.page(1)
+    except EmptyPage:
+        pager = paginator.page(paginator.num_pages)
+
+    return render(request, 'trainer/clients/client_list.html', {'clients': pager, 'search': search, 'page_obj': pager})
+
 
 def client_add(request):
 
@@ -38,7 +61,7 @@ def client_add(request):
     else:
         form = ClientForm()
 
-    return render(request, "trainer/client/client_add.html", {"form": form})
+    return render(request, "trainer/clients/client_add.html", {"form": form})
 
 def client_edit(request, pk):
     
@@ -56,7 +79,7 @@ def client_edit(request, pk):
     else:
         form = ClientForm(instance=client)
 
-    return render(request, "trainer/client/client_edit.html", {"form": form})
+    return render(request, "trainer/clients/client_edit.html", {"form": form})
 
 def client_delete(request, pk):
     
@@ -72,7 +95,7 @@ def client_delete(request, pk):
         messages.success(request, "Client has been successfully deleted!")
         return redirect("client_list")
 
-    return render(request, "trainer/client/client_delete.html", {"client": client})
+    return render(request, "trainer/clients/client_delete.html", {"client": client})
 
 
 # def get_client_info(request, pk):

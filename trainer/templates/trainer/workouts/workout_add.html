@@ -12,7 +12,7 @@
     <hr class="opacity-100" style="height:3px; background-color: #3ABEF9;" />
 
     <div class="row">
-        <div class="col-md-4 col-lg-4 col-12">
+        <div class="col-md-4 col-lg-4 col-12 border">
             <div class="accordion accordion-flush" id="accordionFlushExample">
                 <!-- Tags and Exercises Accordion Item -->
                 <div class="accordion-item">
@@ -91,7 +91,7 @@
                 {% include "trainer/includes/_form_errors.html" %}
 
                 <div class="col-12">
-                    <div class="row mb-3">
+                    <div class="row mb-3 px-2">
                         <label for="{{ form.client.id_for_label}}" class="col-12 col-form-label">
                             {{ form.client.label }}
                         </label>
@@ -155,7 +155,10 @@
             </form>
         </div>
 
-        <!-- ========================== EMPTY TEMPLATE (used for JS cloning) ========================= -->
+        
+    </div>
+
+    <!-- ========================== EMPTY TEMPLATE (used for JS cloning) ========================= -->
         <div id="empty-form-template" class="d-none">
             <div class="formset-row mb-3 p-2 bg-dark border border-secondary rounded overflow-hidden">
                 
@@ -197,7 +200,6 @@
             </div>
         </div>
         <!-- ========================== /EMPTY TEMPLATE (used for JS cloning) ========================= -->
-    </div>
 
     <script>
         var goalsElement = document.getElementById("client-goals")

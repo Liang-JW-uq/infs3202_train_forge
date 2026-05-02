@@ -200,3 +200,90 @@ Social Login
 REFERENCES:
     --- https://python-social-auth.readthedocs.io/en/latest/configuration/django.html
     --- https://medium.com/@kennethjiang/python-social-auth-for-django-tutorial-16bbe792659f
+
+
+14. any_done = WorkoutExercise.objects.filter(
+        workout=OuterRef('pk'),
+        is_done=True
+    )
+
+    workouts = workouts.aggregate(
+        total=Count('id'),
+        completed=Count('id', filter=Q(is_completed=True)),
+        not_started=Count(
+            'id', 
+            filter=Q(is_completed=False) & ~Exists(any_done)
+        ),
+        in_progress= Count('id',
+            filter=Q(is_completed=False) & ~Exists(any_done)
+        )
+    )
+
+Now, if I instead want in_progress to be the count of any workout that has is_completed set to False, but with >=1 or even all of its Workout_Exercise entities' is_done property set to True, what is the syntax to find that?
+
+To capture workouts that have actually been started but aren't finished yet, you can leverage the same `Exists` logic but remove the negation (`~`).
+
+If a workout is not completed, but **at least one** exercise is done, it is semantically "In Progress."
+
+### The Updated Query
+
+```python
+from django.db.models import Count, Q, Exists, OuterRef
+
+# Subquery: Checks if there is AT LEAST ONE exercise marked as done
+any_done = WorkoutExercise.objects.filter(
+    workout=OuterRef('pk'),
+    is_done=True
+)
+
+stats = workouts.aggregate(
+    total=Count('id'),
+    completed=Count('id', filter=Q(is_completed=True)),
+    # Case 1: Not finished AND not a single exercise done
+    not_started=Count(
+        'id', 
+        filter=Q(is_completed=False) & ~Exists(any_done)
+    ),
+    # Case 2: Not finished AND at least one exercise is done
+    in_progress=Count(
+        'id', 
+        filter=Q(is_completed=False) & Exists(any_done)
+    )
+)
+```
+
+### Breakdown of the Logic
+
+*   **`Exists(any_done)`**: This translates to a SQL `EXISTS` clause. It returns `True` the moment the database finds the very first `WorkoutExercise` related to that workout where `is_done=True`.
+*   **The "At Least One" Rule**: By using `Exists` without the tilde (`~`), you are specifically targeting workouts that have initiated progress.
+*   **The "All Exercises Done" Scenario**: If a workout has **all** exercises done but `is_completed` is still `False`, it will still fall into `in_progress` with the logic above. 
+
+---
+
+### Refined Logic: "In Progress" vs "Needs Review"
+If you want to be extremely specific and differentiate between "Started" and "Everything finished but not officially closed," you can use `annotate` before the aggregate to count the discrepancies:
+
+```python
+from django.db.models import F
+
+stats = workouts.annotate(
+    done_count=Count('exercises', filter=Q(exercises__is_done=True)),
+    total_exercises=Count('exercises')
+).aggregate(
+    total=Count('id'),
+    completed=Count('id', filter=Q(is_completed=True)),
+    # In progress: Started, but at least one exercise is still pending
+    in_progress=Count(
+        'id',
+        filter=Q(is_completed=False, done_count__gt=0, done_count__lt=F('total_exercises'))
+    ),
+    # Fully finished exercises, but the Workout toggle is still False
+    needs_closure=Count(
+        'id',
+        filter=Q(is_completed=False, done_count=F('total_exercises'), total_exercises__gt=0)
+    )
+)
+```
+
+### Performance Tip
+Using `Exists` (as shown in the first example) is generally significantly faster than comparing `Count` values. Databases are very efficient at checking if "at least one" row exists, whereas a `Count` forces the database to scan every single related exercise record to get an exact sum before it can finish the calculation.

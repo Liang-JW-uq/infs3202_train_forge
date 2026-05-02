@@ -12,7 +12,7 @@
         </div>
 
         <div>
-            <a href="{% url 'appointment_calendar' %}" class="btn btn-primary">Calendar View</a>
+            <a href="{% url 'appointment_calendar' %}" class="btn" style="background-color: #22be0e;">Calendar View</a>
             <a href="{% url 'appointment_list' %}" class="btn btn-secondary">List View</a>
         </div>
         
@@ -29,7 +29,7 @@
             </div>
         </form>
 
-        <a href="{% url 'appointment_add' %}" class="btn btn-primary">+ Add Appointment</a>
+        <a href="{% url 'appointment_add' %}" class="btn px-4" style="background-color: #22be0e;">+ Add Appointment</a>
     </div>
 
     <div class="table-responsive">
@@ -45,9 +45,9 @@
             <tbody>
                 {% for appointment in appointments %}
                 <tr>
-                    <td class="fw-bold">{{ appointment.client.name }}</td>
-                    <td class="fw-bold">{{ appointment.scheduled_date }}</td>
-                    <td class="fw-bold">{{ appointment.scheduled_time }}</td>
+                    <td>{{ appointment.client.name }}</td>
+                    <td>{{ appointment.scheduled_date }}</td>
+                    <td>{{ appointment.scheduled_time }}</td>
                     <td class="text-end">
                         <div class="btn-group flex-column flex-sm-row">
                             <a href="{% url 'appointment_edit' appointment.id %}" class="btn btn-sm btn-outline-primary mb-1 mb-sm-0">Edit</a>

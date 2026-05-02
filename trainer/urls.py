@@ -65,6 +65,7 @@ urlpatterns = [
     path("workout/add/", login_required(workout_view.workout_add), name="workout_add"),
     path("workout/edit/<int:pk>/", login_required(workout_view.workout_edit), name="workout_edit"),
     path("workout/delete/<int:pk>/", login_required(workout_view.workout_delete), name="workout_delete"),
+    path("workout/pending/", login_required(workout_view.get_pending_workouts), name="get_pending_workouts"),
 
     path("ai/generate/<str:prompt>", ai_view.ask, name="ai_generate"),
     path("ai/generate2/<str:prompt>", ai_view.ask2, name="ai_generate"),
