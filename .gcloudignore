@@ -30,4 +30,8 @@ docker-compose.yml
 .env
 
 
+# These are explicitly saying DON'T IGNORE THESE FILES;
+# App Engine will look at .gitignore first; info.py we Don't Want in GitHub due to credential safety, but we
+# ... actually want it in the deploy to function
 !staticfiles/
+!config/info.py

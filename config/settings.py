@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-kdu+gvenhn8d3ayyg2g@vaxcmil@4grxy6cv%2rewq)@4)t+_e'
 
-from config.info import G_API_KEY, OR_API_KEY, U_GPT_KEY
+from .info import G_API_KEY, OR_API_KEY, U_GPT_KEY
 GEMINI_API_KEY = G_API_KEY
 OPENROUTER_API_KEY = OR_API_KEY
 UNI_CHATGPT_KEY = U_GPT_KEY
@@ -99,7 +99,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-from config.info import DB_ENGINE, DB_NAME, DB_USER, DB_PWD, DB_HOST, DB_PORT
+from .info import DB_ENGINE, DB_NAME, DB_USER, DB_PWD, DB_HOST, DB_PORT
 DATABASES = {
     'default': {
         'ENGINE'    : DB_ENGINE,
@@ -144,13 +144,23 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # This is for social-auth login
 # =================================== SOCIAL LOGINS =========================================== #
+
+
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.github.GithubOAuth2',
     'django.contrib.auth.backends.ModelBackend',  # Keep for username/password login
 )
 
-from config.info import S_AUTH_GOOGLE_K, S_AUTH_GOOGLE_S
+
+# Tells Django to trust the X-Forwarded-Proto header from App Engine
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# Optional: Force all social auth redirects to use HTTPS
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+
+
+from .info import S_AUTH_GOOGLE_K, S_AUTH_GOOGLE_S
 # Google OAuth2
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = S_AUTH_GOOGLE_K
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = S_AUTH_GOOGLE_S
@@ -158,6 +168,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/userinfo.email',
     'https://www.googleapis.com/auth/userinfo.profile',
 ]
+SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_REDIRECT_DOMAINS = ['uq-train-forge.as.r.appspot.com']
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'https://uq-train-forge.as.r.appspot.com/complete/google-oauth2/'
 
 # Github OAuth2
 SOCIAL_AUTH_GITHUB_KEY = "Ov23li46awk1gCKzgjoZ"

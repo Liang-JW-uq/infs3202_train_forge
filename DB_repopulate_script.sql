@@ -1,159 +1,90 @@
--- =========================
--- RESET
--- =========================
-SET FOREIGN_KEY_CHECKS = 0;
-
-TRUNCATE TABLE workout_exercises;
-TRUNCATE TABLE workouts;
-TRUNCATE TABLE tags_exercises;
-TRUNCATE TABLE exercises;
-TRUNCATE TABLE clients;
-TRUNCATE TABLE tags;
-TRUNCATE TABLE user_trainers;s
-
-SET FOREIGN_KEY_CHECKS = 1;
+-- 1. CLIENTS 
+-- ----------
+INSERT INTO clients (NAME, goals, weight, height, age, preferred_times, email, trainer_id) VALUES
+('Client 1 T1', 'I want to slim down', 123, 1.5, 35, 'Morning', 'client1@email.com', 2),
 
 
--- =========================
--- TRAINERS
--- =========================
-INSERT INTO user_trainers 
-(username, PASSWORD, email, first_name, last_name, 
- is_trainer, is_active, is_staff, is_superuser, date_joined)
-VALUES
-('trainer1@email.com','pbkdf2_sha256$600000$abc123xyz$uQwK8Jp0zJ7h6F2mVw0QkK5sP6Q9ZxYx8zQfF3Yk1k8=','trainer1@email.com','John','Tan',1,1,0,0,NOW()),
-('trainer2@email.com','pbkdf2_sha256$600000$abc123xyz$uQwK8Jp0zJ7h6F2mVw0QkK5sP6Q9ZxYx8zQfF3Yk1k8=','trainer2@email.com','Sarah','Lim',1,1,0,0,NOW()),
-('trainer3@email.com','pbkdf2_sha256$600000$abc123xyz$uQwK8Jp0zJ7h6F2mVw0QkK5sP6Q9ZxYx8zQfF3Yk1k8=','trainer3@email.com','David','Wong',1,1,0,0,NOW());
+-- 2. TAGS
+-- -------
+INSERT INTO tags (NAME, trainer_id) VALUES
+('Slimming T1', 2), 
+('Muscle Build T1', 2), 
+('Endurance T1', 2), 
+('Upper Body T1', 2), 
+('Lower Body T1', 2), 
+('Core Stability T1', 2), 
+('Explosive T1', 2), 
+('Bodyweight T1', 2), 
+('Cardio T1', 2), 
+('Strength T1', 2), 
+('Push T1', 2), 
+('Pull T1', 2), 
+('Legs T1', 2);
 
 
--- =========================
--- TAGS
--- =========================
-INSERT INTO tags (name, trainer_id) VALUES
-('Slimming',1),('Body Build',1),('Muscle Toning',1),('Upper Body',1),('Lower Body',1),('Biceps',1),('Calves',1),
-('Slimming',2),('Body Build',2),('Muscle Toning',2),('Upper Body',2),('Lower Body',2),('Biceps',2),('Calves',2),
-('Slimming',3),('Body Build',3),('Muscle Toning',3),('Upper Body',3),('Lower Body',3),('Biceps',3),('Calves',3);
+-- 3. EXERCISES
+-- ------------
+INSERT INTO exercises (NAME, instructions, def_sets, def_reps, def_weight, def_duration, trainer_id) VALUES
+('Barbell Squat T1', 'Bar on traps. Squat deep, keep back straight.', 4, 10, 60.00, 0, 2),
+('Deadlift T1', 'Hinge at hips. Lift using legs and back.', 5, 5, 100.00, 0, 2),
+('Bench Press T1', 'Lower bar to mid-chest. Push explosively.', 4, 8, 50.00, 0, 2),
+('Overhead Press T1', 'Press bar from shoulders to lock-out overhead.', 3, 10, 30.00, 0, 2),
+('Barbell Rows T1', 'Hinge forward, pull bar to mid-waist.', 4, 10, 40.00, 0, 2),
+('Romanian Deadlift T1', 'Hinge at hips, feel hamstring stretch.', 3, 12, 50.00, 0, 2),
+('Barbell Hip Thrusts T1', 'Drive hips upward, squeeze glutes.', 4, 12, 60.00, 0, 2),
+('Incline DB Press T1', 'Press dumbbells up from an inclined bench.', 3, 10, 20.00, 0, 2),
+('DB Shoulder Press T1', 'Seated press, start at ear level.', 3, 12, 18.00, 0, 2),
+('DB Lateral Raises T1', 'Lift dumbbells out to sides to shoulder height.', 4, 15, 7.50, 0, 2),
+('DB Bicep Curls T1', 'Alternating arms, rotate palm up.', 3, 12, 12.00, 0, 2),
+('Hammer Curls T1', 'Neutral grip (palms in).', 3, 12, 12.00, 0, 2),
+('DB Bulgarian Split Squats T1', 'One foot elevated on bench.', 3, 10, 10.00, 0, 2),
+('DB Goblet Squats T1', 'Hold one dumbbell at chest level.', 3, 15, 20.00, 0, 2),
+('DB Lunges T1', 'Step forward, keeping torso upright.', 3, 20, 15.00, 0, 2),
+('DB Tricep Extensions T1', 'Hold DB behind head, extend upward.', 3, 12, 15.00, 0, 2),
+('Lat Pulldown T1', 'Pull bar to upper chest.', 4, 10, 45.00, 0, 2),
+('Leg Press T1', 'Push platform with mid-foot.', 4, 12, 120.00, 0, 2),
+('Leg Extensions T1', 'Extend legs fully on machine.', 3, 15, 30.00, 0, 2),
+('Seated Leg Curls T1', 'Curl legs toward glutes.', 3, 15, 25.00, 0, 2),
+('Cable Pushdowns T1', 'Use rope attachment. Squeeze triceps.', 3, 15, 20.00, 0, 2),
+('Seated Cable Row T1', 'Pull handle to stomach.', 3, 12, 40.00, 0, 2),
+('Pec Deck Flys T1', 'Bring handles together in front of chest.', 3, 12, 35.00, 0, 2),
+('Cable Face Pulls T1', 'Pull rope toward forehead.', 4, 20, 15.00, 0, 2),
+('Assault Bike T1', 'Max effort push/pull for 30s.', 8, 0, 0.00, 10, 2),
+('StairMaster T1', 'Continuous climbing.', 0, 0, 0.00, 20, 2),
+('Rowing Machine T1', 'Drive with legs, pull to ribs.', 0, 0, 0.00, 15, 2),
+('Kettlebell Swings T1', 'Snap hips forward to swing bell.', 4, 25, 16.00, 0, 2),
+('Burpees T1', 'Chest to floor, jump up.', 4, 15, 0.00, 0, 2),
+('Box Jumps T1', 'Jump onto box, land softly.', 3, 10, 0.00, 0, 2),
+('Battle Ropes T1', 'Alternating waves.', 5, 0, 0.00, 1, 2),
+('Mountain Climbers T1', 'Drive knees to chest rapidly.', 4, 0, 0.00, 1, 2),
+('Jump Rope T1', 'Continuous jumping.', 5, 0, 0.00, 3, 2),
+('Pull Ups T1', 'Hang from bar, pull chest to bar.', 3, 10, 0.00, 0, 2),
+('Chin Ups T1', 'Underhand grip. Targets biceps.', 3, 10, 0.00, 0, 2),
+('Dips T1', 'Lower body between parallel bars.', 3, 12, 0.00, 0, 2),
+('Push Ups T1', 'Standard chest-to-floor.', 4, 20, 0.00, 0, 2),
+('Plank T1', 'Hold straight line on elbows.', 3, 0, 0.00, 2, 2),
+('Hanging Leg Raises T1', 'Lift legs to 90 degrees.', 3, 15, 0.00, 0, 2),
+('Russian Twists T1', 'Rotate torso side to side.', 3, 30, 5.00, 0, 2),
+('Ab Wheel Rollouts T1', 'Roll forward keeping back flat.', 3, 12, 0.00, 0, 2),
+('Walking Lunges T1', 'Step forward alternating legs.', 3, 24, 0.00, 0, 2),
+('Bicycle Crunches T1', 'Rotate elbow to opposite knee.', 3, 40, 0.00, 0, 2),
+('Wall Sits T1', 'Back against wall, thighs parallel.', 3, 0, 0.00, 1, 2),
+('Bird Dog T1', 'Extend opposite arm/leg.', 3, 12, 0.00, 0, 2);
 
 
--- =========================
--- EXERCISES
--- =========================
-INSERT INTO exercises 
-(name, instructions, def_sets, def_reps, def_weight, def_duration, trainer_id)
-VALUES
--- Trainer 1
-('Bench Press','Proper form',3,10,40,0,1),
-('Push Up','Standard',3,15,0,0,1),
-('Pull Up','Full range',3,8,0,0,1),
-('Bicep Curl','Dumbbells',3,12,10,0,1),
-('Tricep Dip','Bodyweight',3,12,0,0,1),
-('Squat','Barbell',4,10,60,0,1),
-('Lunges','Alternating',3,12,10,0,1),
-('Deadlift','Keep back straight',4,8,80,0,1),
-('Calf Raise','Controlled',3,15,20,0,1),
-('Leg Press','Machine',3,12,80,0,1),
-('Running','Treadmill',0,0,0,20,1),
-('Cycling','Bike',0,0,0,25,1),
-('Jump Rope','Skipping',0,0,0,10,1),
-('Plank','Hold',0,0,0,5,1),
-('Mountain Climbers','Fast pace',0,0,0,10,1),
-('Burpees','Full body',3,10,0,0,1),
 
--- Trainer 2
-('Bench Press','Proper form',3,10,40,0,2),
-('Push Up','Standard',3,15,0,0,2),
-('Pull Up','Full range',3,8,0,0,2),
-('Bicep Curl','Dumbbells',3,12,10,0,2),
-('Tricep Dip','Bodyweight',3,12,0,0,2),
-('Squat','Barbell',4,10,60,0,2),
-('Lunges','Alternating',3,12,10,0,2),
-('Deadlift','Keep back straight',4,8,80,0,2),
-('Calf Raise','Controlled',3,15,20,0,2),
-('Leg Press','Machine',3,12,80,0,2),
-('Running','Treadmill',0,0,0,20,2),
-('Cycling','Bike',0,0,0,25,2),
-('Jump Rope','Skipping',0,0,0,10,2),
-('Plank','Hold',0,0,0,5,2),
-('Mountain Climbers','Fast pace',0,0,0,10,2),
-('Burpees','Full body',3,10,0,0,2),
-
--- Trainer 3
-('Bench Press','Proper form',3,10,40,0,3),
-('Push Up','Standard',3,15,0,0,3),
-('Pull Up','Full range',3,8,0,0,3),
-('Bicep Curl','Dumbbells',3,12,10,0,3),
-('Tricep Dip','Bodyweight',3,12,0,0,3),
-('Squat','Barbell',4,10,60,0,3),
-('Lunges','Alternating',3,12,10,0,3),
-('Deadlift','Keep back straight',4,8,80,0,3),
-('Calf Raise','Controlled',3,15,20,0,3),
-('Leg Press','Machine',3,12,80,0,3),
-('Running','Treadmill',0,0,0,20,3),
-('Cycling','Bike',0,0,0,25,3),
-('Jump Rope','Skipping',0,0,0,10,3),
-('Plank','Hold',0,0,0,5,3),
-('Mountain Climbers','Fast pace',0,0,0,10,3),
-('Burpees','Full body',3,10,0,0,3);
-
-
--- =========================
--- CLIENTS
--- =========================
-INSERT INTO clients 
-(name, email, age, height, weight, goals, preferred_times, trainer_id)
-VALUES
-('John Carter','john1@email.com',28,1.75,75,'Build muscle','Morning',1),
-('Alice Tan','alice1@email.com',24,1.60,55,'Slim down','Evening',1),
-('Michael Lee','mike1@email.com',35,1.80,85,'Strength','Afternoon',1),
-('Sarah Lim','sarah2@email.com',29,1.65,60,'Tone','Morning',2),
-('David Wong','david2@email.com',40,1.78,90,'Lose weight','Evening',2),
-('Kevin Goh','kevin3@email.com',31,1.70,70,'Maintain','Night',3),
-('Emma Ong','emma3@email.com',26,1.58,52,'Slimming','Morning',3);
-
-
--- =========================
--- WORKOUTS (FIXED)
--- =========================
-INSERT INTO workouts (trainer_id, client_id, scheduled_date, is_completed)
-VALUES
-(1,1,NOW(),0),
-(2,4,NOW(),0);
-
-
--- =========================
--- WORKOUT EXERCISES (FIXED)
--- =========================
-INSERT INTO workout_exercises
-(workout_id, exercise_id, pre_sets, pre_reps, pre_weight, actual_sets, actual_reps, actual_weight)
-VALUES
-(1,1,3,10,40,3,10,40),
-(1,2,3,15,0,3,12,0),
-(2,17,3,10,40,3,8,40),
-(2,18,3,15,0,2,10,0);
-
-
--- =========================
--- TAGS ↔ EXERCISES (SAFE)
--- =========================
-INSERT IGNORE INTO tags_exercises (exercise_id, tag_id)
-
-SELECT e.id, t.id
-FROM exercises e
-JOIN tags t ON t.trainer_id = e.trainer_id
-WHERE
-(e.name='Bench Press' AND t.name IN ('Upper Body','Body Build','Biceps')) OR
-(e.name='Push Up' AND t.name IN ('Upper Body','Muscle Toning')) OR
-(e.name='Pull Up' AND t.name IN ('Upper Body','Biceps')) OR
-(e.name='Bicep Curl' AND t.name IN ('Biceps','Muscle Toning')) OR
-(e.name='Tricep Dip' AND t.name='Upper Body') OR
-(e.name='Squat' AND t.name IN ('Lower Body','Body Build')) OR
-(e.name='Lunges' AND t.name IN ('Lower Body','Muscle Toning')) OR
-(e.name='Deadlift' AND t.name IN ('Lower Body','Body Build')) OR
-(e.name='Calf Raise' AND t.name IN ('Calves','Lower Body')) OR
-(e.name='Leg Press' AND t.name IN ('Lower Body','Body Build')) OR
-(e.name='Running' AND t.name IN ('Slimming','Lower Body')) OR
-(e.name='Cycling' AND t.name IN ('Slimming','Lower Body')) OR
-(e.name='Jump Rope' AND t.name='Slimming') OR
-(e.name='Plank' AND t.name='Muscle Toning') OR
-(e.name='Mountain Climbers' AND t.name IN ('Slimming','Muscle Toning')) OR
-(e.name='Burpees' AND t.name IN ('Slimming','Body Build'));
+-- 4. JUNCTION TABLE
+-- -----------------
+INSERT INTO tags_exercises (exercise_id, tag_id) SELECT id, 2 FROM exercises WHERE id BETWEEN 1 AND 24;
+INSERT INTO tags_exercises (exercise_id, tag_id) SELECT id, 10 FROM exercises WHERE id IN (1, 2, 3, 4, 5, 7, 18);
+INSERT INTO tags_exercises (exercise_id, tag_id) SELECT id, 1 FROM exercises WHERE id IN (25, 26, 27, 28, 29, 31, 32, 33, 42);
+INSERT INTO tags_exercises (exercise_id, tag_id) SELECT id, 9 FROM exercises WHERE id IN (25, 26, 27, 29, 32, 33);
+INSERT INTO tags_exercises (exercise_id, tag_id) SELECT id, 3 FROM exercises WHERE id IN (25, 26, 27, 28, 31, 38, 42, 44);
+INSERT INTO tags_exercises (exercise_id, tag_id) SELECT id, 4 FROM exercises WHERE id IN (3, 4, 5, 8, 9, 10, 11, 12, 16, 17, 21, 22, 23, 24, 34, 35, 36, 37);
+INSERT INTO tags_exercises (exercise_id, tag_id) SELECT id, 5 FROM exercises WHERE id IN (1, 2, 6, 7, 13, 14, 15, 18, 19, 20, 42, 44);
+INSERT INTO tags_exercises (exercise_id, tag_id) SELECT id, 11 FROM exercises WHERE id IN (1, 3, 4, 8, 9, 16, 18, 19, 21, 23, 36, 37, 44);
+INSERT INTO tags_exercises (exercise_id, tag_id) SELECT id, 12 FROM exercises WHERE id IN (2, 5, 6, 7, 11, 12, 17, 20, 22, 24, 34, 35);
+INSERT INTO tags_exercises (exercise_id, tag_id) SELECT id, 13 FROM exercises WHERE NAME IN ('Barbell Squat', 'Romanian Deadlift', 'Barbell Hip Thrusts', 'Leg Press', 'Leg Extensions', 'Seated Leg Curls', 'DB Bulgarian Split Squats', 'DB Goblet Squats');
+INSERT INTO tags_exercises (exercise_id, tag_id) SELECT id, 6 FROM exercises WHERE id IN (38, 39, 40, 41, 43, 45, 27, 32);
+INSERT INTO tags_exercises (exercise_id, tag_id) SELECT id, 7 FROM exercises WHERE id IN (1, 3, 25, 28, 29, 30, 31);
+INSERT INTO tags_exercises (exercise_id, tag_id) SELECT id, 8 FROM exercises WHERE id IN (29, 32, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45);

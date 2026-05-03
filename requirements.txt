@@ -12,6 +12,7 @@ social-auth-app-django==5.7.0
 langchain
 langchain-core
 langchain-google-genai
+langchain-openai==1.1.16
 google-genai==1.72.0
 
 pydantic==2.12.5

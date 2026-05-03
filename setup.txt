@@ -191,3 +191,14 @@ For debugging / logs for App Engine
 --- CMD: gcloud app logs read
 --- CMD: gcloud app logs tail
 --- CMD: gcloud app instances list
+
+
+<Simple Quick-Reset Steps>
+--------------------------
+1. Nuke database + migrations folder
+2. cmd: py manage.py makemigrations orm
+    py manage.py migrate
+3. cmd: py manage.py createsuperuser
+4. Login to Django admin, create Free + Premium groups;
+    Attach permission <can use AI> to groups    --> orm/user_trainer.py line 19-26
+5. 
