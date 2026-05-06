@@ -18,4 +18,4 @@ class UserTrainerAdmin(UserAdmin):
         ("Custom Fields", {"fields": ("is_trainer",)}),
     )
 
-    list_per_page = 2
+    list_per_page = 6

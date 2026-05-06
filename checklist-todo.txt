@@ -24,6 +24,7 @@
 4. { Dashboard Pending Workouts Widget } Try and add a loading indicator
 5. { Workout Edit page } Add in textarea to show AI_feedback if any
 6. { Workout Edit page } Disable "actual" fields if prescribed = 0
+7. { admin } Double Check Pagination, only 2 rows or normal 6 rows?
 
 
 
