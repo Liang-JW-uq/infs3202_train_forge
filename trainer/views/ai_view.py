@@ -147,11 +147,9 @@ def generate_workout(request, client_id, no_of_exercises):
         model_kwargs={"tool_choice": "auto"} 
     )
     # # Backup model
-    # llm2 = ChatGoogleGenerativeAI(
+    # llm = ChatGoogleGenerativeAI(
     #     model='gemini-2.5-flash-lite',
-    #     google_api_key=settings.GEMINI_API_KEY,
-    #     temperature=0.5,
-    #     max_tokens=150
+    #     google_api_key=settings.GEMINI_API_KEY
     # )
     # # School Provided Option
     # llm3 = ChatOpenAI(
