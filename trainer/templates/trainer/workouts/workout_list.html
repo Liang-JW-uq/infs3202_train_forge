@@ -39,7 +39,7 @@
                 {% for workout in workouts %}
                 <tr>
                     <td class="text-break">{{ workout.client.name }}</td>
-                    <td>{{ workout.is_completed }}</td>
+                    <td>{{ workout.is_completed|yesno:"✅,❌"|safe }}</td>
                     <td class="text-center d-none d-sm-table-cell">{{ workout.exercise_count }}</td>
                     <td class="text-center d-none d-sm-table-cell">{{ workout.exercises_done }}</td>
                     <td class="text-end">

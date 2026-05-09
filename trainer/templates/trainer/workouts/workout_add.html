@@ -64,7 +64,9 @@
                                     </select>
                                 </div>
                                 <div class="col-4 col-lg-3 text-center">
-                                    <button type="button" id="ai-generate-exercises" onclick="generateExercise()" class="btn btn-secondary">Generate</button>
+                                    <button type="button" class="btn btn-primary" id="ai-generate-exercises" onclick="generateExercise()">
+                                        Generate
+                                    </button>
                                 </div>
                             </div>
                             <div class="progress" id="progress-bar" style="display: none;">
@@ -99,9 +101,7 @@
                     </div>
                     
 
-                    <div id="client-info">
-
-                    </div>
+                    <div id="client-info"></div>
                 </div>
 
                 <br/>
@@ -381,6 +381,12 @@
         }
 
         async function generateExercise() {
+            debugger
+            if (!clientSelectElement.value) {
+                alert("Please select a client!")
+                return;
+            }
+
             debugger;
             exercise_no = exerciseNumberGenerateSelect.value
             client_id = clientSelectElement.value

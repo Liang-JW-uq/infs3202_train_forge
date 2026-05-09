@@ -31,11 +31,15 @@
                         </div>
                         <div class="row">
                             <div class="mb-3">
-                                <!-- <label class="form-label small" for="client-goals">Goals</label> -->
-                                <textarea class="form-control" disabled readonly id="client-goals" rows="3">
-                                    {{form.instance.client.goals}}
-                                </textarea>
+                                <label class="form-label" for="client-goals">Client Goals:</label>
+                                <textarea class="form-control" disabled readonly id="client-goals" rows="3">{{form.instance.client.goals}}</textarea>
                             </div>
+                            {% if form.instance.ai_feedback %}
+                            <div class="mb-3">
+                                <label class="form-label" for="client-goals">AI Feedback:</label>
+                                <textarea class="form-control" disabled readonly id="client-goals" rows="3">{{form.instance.ai_feedback}}</textarea>
+                            </div>
+                            {% endif %}
                             <div class="mb-3">
                                 <label for="{{ form.trainer_review.id_for_label }}" class="form-label">
                                     {{ form.trainer_review.label}}
@@ -44,7 +48,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="{{ form.client_remarks.id_for_label }}" class="form-label"> 
-                                    {{ form.client_remarks.label}}
+                                    {{ form.client_remarks.label }}
                                 </label>
                                 {{ form.client_remarks}}
                             </div>                                                        
@@ -109,25 +113,42 @@
                                 <div class="col-md-2 col-4">
                                     <div class="input-group input-group-sm">
                                         <span class="input-group-text">Sets</span>
-                                        {{ ex_form.actual_sets }}
+                                        {% if ex_form.instance.pre_sets <= 0 %}
+                                            <input type="number" class="form-control" readonly disabled value="{{ ex_form.instance.actual_sets }}">
+                                        {% else %}
+                                            {{ ex_form.actual_sets }}
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="col-md-2 col-4">
                                     <div class="input-group input-group-sm">
                                         <span class="input-group-text">Reps</span>
-                                        {{ ex_form.actual_reps }}
+                                        {% if ex_form.instance.pre_reps <= 0 %}
+                                            <input type="number" class="form-control" readonly disabled value="{{ ex_form.instance.actual_reps }}">
+                                        {% else %}
+                                            {{ ex_form.actual_reps }}
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="col-md-2 col-4">
                                     <div class="input-group input-group-sm">
                                         <span class="input-group-text">Weight</span>
-                                        {{ ex_form.actual_weight }}
+                                        {% if ex_form.instance.pre_weight <= 0 %}
+                                            <input type="number" class="form-control" readonly disabled value="{{ ex_form.instance.actual_weight }}">
+                                        {% else %}
+                                            {{ ex_form.actual_weight }}
+                                        {% endif %}
                                     </div>
+                                    
                                 </div>
                                 <div class="col-md-2 col-4">
                                     <div class="input-group input-group-sm">
                                         <span class="input-group-text">Dur</span>
-                                        {{ ex_form.actual_duration }}
+                                        {% if ex_form.instance.pre_duration <= 0 %}
+                                            <input type="number" class="form-control" readonly disabled value="{{ ex_form.instance.actual_duration }}">
+                                        {% else %}
+                                            {{ ex_form.actual_duration }}
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

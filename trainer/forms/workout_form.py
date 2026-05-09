@@ -43,7 +43,7 @@ class WorkoutExerciseForm(forms.ModelForm):
         fields = ['exercise', 'is_done', 'pre_sets', 'pre_reps', 'pre_weight', 'pre_duration',
                   'actual_sets', 'actual_reps', 'actual_weight', 'actual_duration']
         widgets = {
-            # 'exercise': forms.Select(attrs={'disabled': True}),
+            'exercise': forms.Select(attrs={'style': 'pointer-events:none;'}),
             'pre_sets': forms.NumberInput(attrs={'class': 'form-control'}),
             'pre_reps': forms.NumberInput(attrs={'class': 'form-control'}),
             'pre_weight': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -62,7 +62,7 @@ class WorkoutExerciseForm(forms.ModelForm):
         
         # all the prescribe exercise values are to be marked non editable
         if self.instance and self.instance.pk:
-            readonly_fields = ['exercise', 'pre_sets', 'pre_reps', 'pre_weight', 'pre_duration']
+            readonly_fields = ['pre_sets', 'pre_reps', 'pre_weight', 'pre_duration']
             
             for field_name in readonly_fields:
                 if field_name in self.fields:

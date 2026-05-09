@@ -40,7 +40,7 @@ class Client(models.Model):
         db_default = 0,
         max_digits = 3,
         decimal_places = 2,
-        validators = [MinValueValidator(1), MaxValueValidator(5)],
+        validators = [MinValueValidator(1), MaxValueValidator(3)],
     )
     # weight - in kgs (###.##)
     weight = models.DecimalField(
@@ -48,7 +48,7 @@ class Client(models.Model):
         db_default = 0,
         max_digits = 5,
         decimal_places = 2,        
-        validators = [MinValueValidator(1), MaxValueValidator(200)],
+        validators = [MinValueValidator(10), MaxValueValidator(200)],
     )
 
     goals = models.TextField()                              # this is a TEXT (up to 4GB) in database, NOT varchar   

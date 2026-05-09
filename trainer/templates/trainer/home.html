@@ -1,6 +1,19 @@
 {% extends "trainer/base.html" %}
 
 {% block content %}
+
+<!-- Styling for loading bar using HTMX -->
+<style>
+    #progress-bar {
+        display: none;
+    }
+
+    .htmx-request#progress-bar,
+    .htmx-request #progress-bar {
+        display: flex;
+    }
+</style>
+
 <div class="py-4">
     <h3 class="mb-4 text-center">Trainer Dashboard</h3>
 
@@ -121,7 +134,11 @@
                 
                 <div class="card-body">
 
-                    <div id="pending-workouts-display" hx-get="{% url 'get_pending_workouts' %}" hx-trigger="load" hx-target="this">
+                    <div class="progress" id="progress-bar">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+                    </div>
+
+                    <div id="pending-workouts-display" hx-indicator="#progress-bar" hx-get="{% url 'get_pending_workouts' %}" hx-trigger="load" hx-target="this">
                     </div>
 
                 </div>

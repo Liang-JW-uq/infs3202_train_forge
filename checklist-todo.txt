@@ -17,15 +17,17 @@
 
 
 -----------
-1. { Client page } Add validation to Height + Weight
-2. { Workout Add/Edit page } Figure out why there's a space in the textarea for client goals, find out how to remove them
+1. ✅ { Client page } Add validation to Height + Weight
+2. ✅ { Workout Add/Edit page } Figure out why there's a space in the textarea for client goals, find out how to remove them
     Also implement check to prevent Exercise/Ai-generation before Client is selected
-3. { Workout List page } Change completed True/False with Tick/Cross emotes
-4. { Dashboard Pending Workouts Widget } Try and add a loading indicator
-5. { Workout Edit page } Add in textarea to show AI_feedback if any
-6. { Workout Edit page } Disable "actual" fields if prescribed = 0
-7. { admin } Double Check Pagination, only 2 rows or normal 6 rows?
-8. Add metric labels to the Add/Edit pages (kg, m, min, etc)
+3. ✅ { Workout List page } Change completed True/False with Tick/Cross emotes
+4. ✅ { Dashboard Pending Workouts Widget } Try and add a loading indicator
+5. ✅ { Workout Edit page } Add in textarea to show AI_feedback if any
+6. ✅ { Workout Edit page } Disable "actual" fields if prescribed = 0
+8. ❌ Add metric labels to the Add/Edit pages (kg, m, min, etc)
+
+9. Get ready login accounts + data for submission/presentation
+    - superuser, at least 1 trainer
 
 
 

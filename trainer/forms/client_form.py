@@ -8,6 +8,7 @@ class ClientForm(forms.ModelForm):
 
     goals = forms.CharField(
         label="Goals",
+        strip=True,
         widget=forms.Textarea(attrs={"class": "form-control", "placeholder": "Type your fitness goals here", "rows": 3})
     )
     preferred_times = forms.ChoiceField(

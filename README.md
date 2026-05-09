@@ -46,7 +46,7 @@ Project Structure
 
 
 13. Handing deleting inline formset rows
-    Query: Ok, I have a django inlineform set for an ADD form using client side script to add new row, i need to add a delete row option. use a delete button in each row to call a delete function (mark to row visibility only)
+    { Query }: Ok, I have a django inlineform set for an ADD form using client side script to add new row, i need to add a delete row option. use a delete button in each row to call a delete function (mark to row visibility only)
 
     Answer (ChatGPT):
     
