@@ -13,7 +13,7 @@ class Exercise(models.Model):
         # help_text = "Help for Exercise Name"    # can display later on form
 
         # we can add servre side validation model ONLY validation, nothing to do with db
-        validators = [MinLengthValidator(4), MaxLengthValidator(80)]
+        validators = [MinLengthValidator(5), MaxLengthValidator(80)]
     )
     instructions = models.TextField()
 
@@ -26,14 +26,14 @@ class Exercise(models.Model):
     def_reps = models.IntegerField(
         default = 0,
         db_default=0,
-        validators = [MinValueValidator(0), MaxValueValidator(100)],            # model only validation
+        validators = [MinValueValidator(0), MaxValueValidator(200)],            # model only validation
     )
     def_weight = models.DecimalField(
         default = 0,
         db_default=0,
         max_digits = 5,
         decimal_places = 2,
-        validators = [MinValueValidator(0), MaxValueValidator(100)],            # model only validation
+        validators = [MinValueValidator(0), MaxValueValidator(200)],            # model only validation
         # help_text = "in Kgs" 
     )
     def_duration = models.IntegerField(

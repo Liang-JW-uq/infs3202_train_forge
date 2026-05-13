@@ -1,41 +1,45 @@
-
-
-{% if form.non_field_errors or form.field_errors or form.non_form_errors or formset.errors or formset.non_form_errors %}
+{% if form.errors or form.non_field_errors or formset.non_form_errors or formset.errors %}
 
     <div class="alert alert-danger py-2 small shadow-sm">
         
+        <!-- main forms errors -->
         {% if form.non_field_errors %}
             {% for error in form.non_field_errors %}
                 <div class="text-center">{{ error }}</div>
             {% endfor %}
         {% endif %}
-
-        {% comment %}
-        <!-- {% if form.errors and not form.non_field_errors %} -->
-        {% endcomment %}
-        {% if form.field_errors %}
-            <div class="text-center">
-                <strong>Main Form:</strong>
-                {% for field in form %}
-                    {% if field.errors %}
-                        {{ field.label }}: {{ field.errors|striptags }}
-                    {% endif %}
+        <!-- main form fields errors -->
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="text-center">
+                        <strong>{{ field.label }}:</strong> {{ error }}
+                    </div>
                 {% endfor %}
-            </div>
-        {% endif %}
+            {% endfor %}
 
-        {% if form.non_form_errors %}
-            <div class="text-center border-top mt-1 pt-1">
-                <strong>Exercise List Error:</strong> {{ form.non_form_errors|striptags }}
-            </div>
-        {% endif %}
 
-        {% if formset.non_form_errors %}
-            <div class="text-center border-top mt-1 pt-1">
-                <strong>Exercise List Error:</strong> {{ formset.non_form_errors|striptags }}
-            </div>
-        {% endif %}
+        <!-- AI: Q "django display inline formset field errors"-->
+        <!-- inline formsets errors -->
+        {% for in_form in formset %}
+            <!-- each row is considered a different form itself -->
+            {% for error in in_form.non_field_errors %}
+                <div class="text-center border-top mt-1 pt-1">
+                   {{ error }}
+                </div>
+            {% endfor %}
 
+            {% for field in in_form %}
+                {% for error in field.errors %}
+                    <div class="text-center border-top mt-1 pt-1">
+                        <strong>
+                            {{ in_form.instance.exercise }} -
+                            {{ field.label }}:
+                        </strong>
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+        {% endfor %}
     </div>
-
 {% endif %}

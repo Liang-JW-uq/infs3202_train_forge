@@ -3,6 +3,8 @@ from django.db import models
 from .workout import Workout
 from .exercise import Exercise
 
+from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator, EmailValidator
+
 class WorkoutExercise(models.Model):
     workout = models.ForeignKey(
         Workout, 
@@ -20,16 +22,21 @@ class WorkoutExercise(models.Model):
     # prescribed workout
     pre_sets = models.PositiveIntegerField(
         default=0,
-        db_default=0
+        db_default=0,
+        validators = [MinValueValidator(0), MaxValueValidator(100)]
     )
     pre_reps = models.PositiveIntegerField(
         default=0,
-        db_default=0
+        db_default=0,
+        validators = [MinValueValidator(0), MaxValueValidator(200)]
     )
-    pre_weight = models.PositiveIntegerField(
+    pre_weight = models.DecimalField(
         default=0,
         db_default=0,
-        blank=True
+        blank=True,
+        max_digits = 5,
+        decimal_places = 2,
+        validators = [MinValueValidator(0), MaxValueValidator(200)]
     )
     pre_duration = models.PositiveIntegerField(
         default=0,
@@ -41,17 +48,22 @@ class WorkoutExercise(models.Model):
     actual_sets = models.PositiveIntegerField(
         default=0,
         db_default=0,
+        validators = [MinValueValidator(0), MaxValueValidator(100)],
         blank=True
     )
     actual_reps = models.PositiveIntegerField(
         default=0,
         db_default=0,
+        validators = [MinValueValidator(0), MaxValueValidator(200)],
         blank=True
     )
-    actual_weight = models.PositiveIntegerField(
+    actual_weight = models.DecimalField(
         default=0,
         db_default=0,
-        blank=True
+        blank=True,
+        max_digits = 5,
+        decimal_places = 2,
+        validators = [MinValueValidator(0), MaxValueValidator(200)],
     )
     actual_duration = models.PositiveIntegerField(
         default=0,

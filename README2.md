@@ -1,3 +1,15 @@
+Directory Structure:
+uq-train-forge/
+-- config/
+-- orm/
+-- static/
+-- trainer/
+---- forms/
+---- templates/
+---- views/
+---- urls.py
+
+
 1.  { Query }:
 
     Ok, I have a django inlineform set for an ADD form using client side script to add new row, i need to add a delete row option. use a delete button in each row to call a delete function (mark to row visibility only)
@@ -649,9 +661,89 @@ The progress bar isn't showing when the HTMX hasn't finished loading in. Is it p
 
 8. { Query }: 
 
-
+    What is the proper syntax to create Django display inline formset field errors?
 
     { Answer (Gemini) }:
+
+    In Django, handling errors for **Inline Formsets** can be a bit tricky because you have to manage errors at three different levels: the **Management Form**, the **individual forms** within the set, and the **non-form errors** (errors that apply to the collection as a whole).
+
+    To display these errors properly in your template, you should follow this structural pattern:
+
+    ### 1. Non-Form Errors
+
+    These are errors that aren't specific to a single field or even a single row (e.g., "You must have at least two related items").
+
+    ```html
+    {{ formset.non_form_errors }}
+
+    ```
+
+    ### 2. Form-Specific Errors
+
+    Since an inline formset is a collection of forms, you need to loop through them. Each form has its own `non_field_errors` and individual field errors.
+
+    ```html
+    <form method="post">
+        {% csrf_token %}
+        {{ formset.management_form }}
+
+        {% for form in formset %}
+            <div class="form-row">
+                {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+                {{ form.id }}
+                
+                {# 1. Display non-field errors for this specific row #}
+                {{ form.non_field_errors }}
+
+                {% for field in form.visible_fields %}
+                    <div class="field-container">
+                        {{ field.label_tag }} 
+                        {{ field }}
+                        
+                        {# 2. Display specific field errors #}
+                        {% if field.errors %}
+                            <ul class="errorlist">
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <hr>
+        {% endfor %}
+        
+        <button type="submit">Save</button>
+    </form>
+
+    ```
+
+    ---
+
+    ### Key Components to Remember
+
+    * **`{{ formset.management_form }}`**: **CRITICAL.** If you omit this, Django will throw a `ValidationError` because it won't know how many forms were sent back to the server.
+    * **`{{ form.id }}`**: Always include the hidden ID field for inline forms so Django knows which existing records are being updated versus which are new.
+    * **CSS Classes**: Django's default error list uses the class `.errorlist`. You can style this in your CSS to make the errors stand out (usually `color: red;`).
+
+    ### Handling Errors in the View
+
+    In your `views.py`, ensure you are actually checking the validity of the formset before attempting to save.
+
+    ```python
+    if request.method == 'POST':
+        formset = MyInlineFormSet(request.POST, instance=parent_instance)
+        if formset.is_valid():
+            formset.save()
+            return redirect('success_url')
+        # If not valid, the formset (with errors) is passed back to the template context
+    else:
+        formset = MyInlineFormSet(instance=parent_instance)
+
+    ```
+
+    > **Tip:** If you are using a front-end framework like Bootstrap, you might want to manually check `{% if field.errors %}` to add a class like `is-invalid` directly to the widget attributes.
 
 --------------------------------
 
