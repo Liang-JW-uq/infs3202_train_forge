@@ -48,11 +48,17 @@ def tag_add(request):
                 tag = form.save(commit=False)
                 tag.trainer = userTrainer
                 tag.save()
+                # 'messages' go to base.html
                 messages.success(request, "Tag added successfully")
                 return redirect("tag_list")
             except ValidationError as e:
+                # Errors here are triggered by the FORM CONSTRAINTS;
+                # Also catches DUPLICATES even if not outside constraints because MODEL CONSTRAINTS;
+                # form.add_error goes to the local HTML template page, NOT the form file
+                # Search for 'form_error' in the local files
                 form.add_error(None, str(e))
             except Exception as e:
+                # Errors here are triggered by EXTERNAL SOURCES [Hard DB col restrictions, connection fail, etc]
                 messages.error(request, f"Exceptions: {str(e)}")
         else:
             form.add_error(None, "Invalid Form!")

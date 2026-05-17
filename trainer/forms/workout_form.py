@@ -22,6 +22,8 @@ class WorkoutForm(forms.ModelForm):
             'client': 'Select a client:'
         }
     
+    # Form __init__ by default CANNOT ACCEPT OTHER PARAMS BESIDES 'self'
+    # So we have to manually pop it out
     def __init__(self, *args, **kwargs):
         # **kwargs = {'instance': instance, 'trainer': trainer'} from the views for edit/add
 

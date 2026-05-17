@@ -11,6 +11,9 @@ from ..forms import AccountForm
 UserTrainer = get_user_model()
 
 def login_page(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    
     form = AccountForm(request.POST or None)
 
     if request.method == "POST":
@@ -35,6 +38,9 @@ def login_page(request):
 
 
 def register_page(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    
     if request.method == 'POST':
         form = AccountForm(request.POST)
 

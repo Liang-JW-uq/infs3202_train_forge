@@ -220,50 +220,7 @@
         
         const totalForms = document.querySelector("input[name$='-TOTAL_FORMS']");
 
-        // These events happen when the page first loads, so this mainly will SET UP EVENTS, or LOAD DATA
-        document.addEventListener("DOMContentLoaded", async () => {
-            // We load all of the TAGS associated with the Trainer first at the Start, since they don't change throughout the page
-            // await loadTrainerTags();
 
-            // // Then, we add a Simple EventListener to the CLIENT DROPDOWN SELECT...
-            // // ... so that the Client details we be updated EVERY TIME we CHOOSE A DIFFERENT CLIENT
-            // clientSelectElement.addEventListener("change", async (e) => {
-            // // Here, we call the CUSTOM EXTRA View Function JUST to retrieve the specific data we need
-            // // The function is special because it DOES NOT return a page render...
-            // // ... it returns a JSON RESPONSE OBJECT that is ONLY USABLE by these Javascript Form Requests to update the pages
-            // await fetch(`/client/info/${e.target.value}`)
-            //     .then(res => res.json())
-            //     .then(data => {
-            //         goalsElement.innerHTML = data.goals
-            //         clientAgeElement.value = data.age
-            //         clientWeightElement.value = data.weight
-            //         clientHeightElement.value = data.height
-            //     })
-            // });
-        });
-
-        // Same principle here, calling a SPECIFC EXTRA View Func that returns JSON RESPONSE to POPULATE
-        // async function loadTrainerTags() {
-            // await fetch('/tag/info/')
-            //     .then(res => res.json())
-            //     .then(data => {
-            //         // Here, for every single TAG detected, CREATE A NEW ELEMENT and *APPEND* IT
-            //         tagsContainerElement.innerHTML = data.map(tag => `
-            //             <input class="btn-check" type="checkbox" onchange="loadExercises()" 
-            //                 name="tags_filter" value="${tag.id}" id="tag${tag.id}">
-                        
-            //             <label class="btn btn-outline-primary rounded-pill px-3 py-1" for="tag${tag.id}">
-            //                 ${tag.name}
-            //             </label>
-            //         `).join('');
-
-            //         // data.forEach(function(item, index) {
-            //         //     console.log(`Tag id: ${item.id} - ${item.name   }`)
-            //         // }, );
-            //     })
-        // }
-
-        // This function is found in line 226 - We attach it to EVERY SINGLE TAG ELEMENT CREATED
         // So that each Tag btn can List out ALL *Exercises* that have it as (one of) their tags
         async function loadExercises() {
 

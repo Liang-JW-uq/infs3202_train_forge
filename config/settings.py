@@ -43,6 +43,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # application messages
 from django.contrib.messages import constants as messages
 
+# Bootstrap classes for messages that do appear
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-secondary',
     messages.INFO: 'alert-info',

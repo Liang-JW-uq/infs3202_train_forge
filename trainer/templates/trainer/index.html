@@ -19,24 +19,61 @@
 
                     <div class="mt-4">
                         <div class="border rounded p-3 mb-2">
-                            <span><i class="bi bi-check-2x"></i></span> Structured training workflow
+                            <span><i class="bi bi-list-nested fs-5 fw-bolder"></i></span>&nbsp;&nbsp;Structured training workflow
                         </div>
                         <div class="border rounded p-3 mb-2">
-                            <span><i class="bi bi-check-2x"></i></span>Client & workout management
+                            <span><i class="bi bi-stack fs-5 fw-bolder"></i></span>&nbsp;&nbsp;Client & workout management
                         </div>
                         <div class="border rounded p-3">
-                            <span><i class="bi bi-check-2x"></i></span>Progress tracking & review system
+                            <span><i class="bi bi-file-earmark-bar-graph fs-5 fw-bolder"></i></span>&nbsp;&nbsp;Progress tracking & review system
                         </div>
                     </div>
                 </div>
 
                 <!-- RIGHT LOGIN -->
-                <div class="col-lg-5 ms-auto">
-                    <div class="card bg-dark border-light p-4">
-                        <h4 class="mb-3">Features</h4>
-                        <p>PUT SOMETHING HERE LAH</p>
-                    </div>
-                </div>
+<div class="col-lg-5 ms-auto">
+    <div class="border rounded-4 p-4 bg-dark h-100">
+
+        <span class="text-uppercase small text-secondary">
+            Built for coaches
+        </span>
+
+        <h3 class="fw-bold mt-2">
+            Manage your coaching business in one place
+        </h3>
+
+        <p class="text-secondary mt-3">
+            Organize workouts, clients, appointments, and training progress
+            using a structured workflow designed for personal trainers.
+        </p>
+
+        <div class="mt-4 small">
+            <div class="mb-2">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                Workout programming
+            </div>
+
+            <div class="mb-2">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                Client management
+            </div>
+
+            <div>
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                Session tracking
+            </div>
+        </div>
+
+        <div class="mt-4">
+            {% if not user.is_authenticated %}
+            <a href="{% url 'register' %}" class="btn btn-primary px-4">
+                Get Started
+            </a>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
 
             </div>
         </div>
@@ -73,16 +110,15 @@
     </section>        
 
     <!-- WORKFLOW EXPLANATION -->
-    <section class="py-5 border-top">
-        <div class="container text-center">
+    <section class="py-3 border-top">
+        <div class="container text-center px-5">
             <h2 class="fw-bold">Structured training workflow</h2>
-            <p class="text-secondary">Each module is color-coded for clarity and onboarding</p>
+            <p class="text-secondary">Each module is color-coded for clarity and ease of onboarding</p>
 
-            <div class="row g-4 mt-4">
-
-                <!-- TAG (RED) -->
-                <div class="col-md-3">
-                    <div class="card border-danger bg-dark p-3 h-100">
+            <div class="row g-3 mt-1 px-2 row-cols-1 row-cols-md-2 row-cols-lg-5">
+                <!-- tags -->
+                <div>
+                    <div class="card bg-dark p-3 h-100"  style="border-color: #3ABEF9">
                         <h5 class="text-danger">Tags</h5>
                         <p class="text-secondary small">
                             Create training categories like fat loss, strength, cardio.
@@ -90,9 +126,9 @@
                     </div>
                 </div>
 
-                <!-- EXERCISE (BLUE) -->
-                <div class="col-md-3">
-                    <div class="card border-primary bg-dark p-3 h-100">
+                <!-- exercises -->
+                <div>
+                    <div class="card bg-dark p-3 h-100" style="border-color: #A07CFE">
                         <h5 class="text-primary">Exercises</h5>
                         <p class="text-secondary small">
                             Add exercises and assign multiple tags for filtering.
@@ -100,9 +136,9 @@
                     </div>
                 </div>
 
-                <!-- WORKOUT (GREEN) -->
-                <div class="col-md-3">
-                    <div class="card border-success bg-dark p-3 h-100">
+                <!-- workouts -->
+                <div>
+                    <div class="card bg-dark p-3 h-100" style="border-color: #F971B0">
                         <h5 class="text-success">Workouts</h5>
                         <p class="text-secondary small">
                             Build structured workout plans using selected exercises.
@@ -110,12 +146,22 @@
                     </div>
                 </div>
 
-                <!-- CLIENT (YELLOW) -->
-                <div class="col-md-3">
-                    <div class="card border-warning bg-dark p-3 h-100">
+                <!-- clients -->
+                <div>
+                    <div class="card bg-dark p-3 h-100" style="border-color: #FF8A08">
                         <h5 class="text-warning">Clients</h5>
                         <p class="text-secondary small">
                             Assign workouts, track progress, and manage sessions.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- appointments -->
+                <div>
+                    <div class="card bg-dark p-3 h-100" style="border-color: #22be0e">
+                        <h5 class="text-danger">Tags</h5>
+                        <p class="text-secondary small">
+                            Create appointments with clients
                         </p>
                     </div>
                 </div>
@@ -139,9 +185,9 @@
 
                 <div class="col-md-4">
                     <div class="card bg-dark border-light p-4 h-100">
-                        <h5>Reduce manual work</h5>
+                        <h5>The operating system for personal trainers</h5>
                         <p class="text-secondary small">
-                            Replace scattered notes, chats, and spreadsheets with one structured system.
+                            Structure your coaching business with clarity, consistency, and control.
                         </p>
                     </div>
                 </div>
